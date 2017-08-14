@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="modo_espejo"
+        android:summary="@string/modoespejo_desc"
+        android:title="@string/modoespejo_preference" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="modo_seguro"
+        android:summary="@string/modoseguridad_desc"
+        android:title="@string/modoseguridad_preference" />
+    <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/unidades_array"
+        android:entryValues="@array/unidades_values"
+        android:key="unidades"
+        android:title="@string/unidades_preference"
+        android:summary="%s"/>
+    <ListPreference
+        android:defaultValue="12"
+        android:entries="@array/limites_velocidad"
+        android:entryValues="@array/limites_velocidad"
+        android:key="limit120"
+        android:title="@string/limite120"
+        android:summary="%s"/>
+    <ListPreference
+        android:defaultValue="10"
+        android:entries="@array/limites_velocidad"
+        android:entryValues="@array/limites_velocidad"
+        android:key="limit100"
+        android:title="@string/limite100"
+        android:summary="%s"/>
+    <ListPreference
+        android:defaultValue="8"
+        android:entries="@array/limites_velocidad"
+        android:entryValues="@array/limites_velocidad"
+        android:key="limit80"
+        android:title="@string/limite80"
+        android:summary="%s"/>
+    <ListPreference
+        android:defaultValue="6"
+        android:entries="@array/limites_velocidad"
+        android:entryValues="@array/limites_velocidad"
+        android:key="limit60"
+        android:title="@string/lmimite60"
+        android:summary="%s"/>
+</PreferenceScreen>

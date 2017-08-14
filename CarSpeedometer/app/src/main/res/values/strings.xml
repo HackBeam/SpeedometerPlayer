@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">SpeedometerPlayer</string>
+
+    <string name="modoespejo_preference">Modo Espejo</string>
+    <string name="modoespejo_desc">Invierte la pantalla para reflejarla en el cristal</string>
+
+    <string name="modoseguridad_preference">Modo Seguro</string>
+    <string name="modoseguridad_desc">Incrementa en 10 unidades el valor mostrado</string>
+
+    <string name="unidades_preference">Unidad de medida</string>
+
+    <string-array name="unidades_array">
+        <item>Metros por segundo (m/s)</item>
+        <item>Kilometros por hora (km/h)</item>
+        <item>Millas por hora (mph)</item>
+    </string-array>
+
+    <string-array name="unidades_values">
+        <item>m/s</item>
+        <item>km/h</item>
+        <item>mph</item>
+    </string-array>
+
+    <string name="limite120">Límite alto con un toque</string>
+    <string name="limite100">Límite  bajo con un toque</string>
+    <string name="limite80">Límite alto con doble toque</string>
+    <string name="lmimite60">Límite bajo con doble toque</string>
+
+    <string-array name="limites_velocidad">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>140</item>
+        <item>150</item>
+        <item>160</item>
+        <item>170</item>
+        <item>180</item>
+        <item>190</item>
+        <item>200</item>
+    </string-array>
+
 </resources>
