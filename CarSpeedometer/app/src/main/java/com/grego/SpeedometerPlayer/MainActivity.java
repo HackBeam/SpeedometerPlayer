@@ -4,19 +4,22 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.BatteryManager;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //Load default preferences
 
         //BRILLO 100%
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -71,17 +76,40 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         limit_text.setTypeface(type);
         reloj.setTypeface(type);
 
-        actualizarBateria();
+        actualizarInterfaz();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        limite = Integer.parseInt(sp.getString("limit120", "120"));
+        actualizarInterfaz();
     }
 
     /**
      * Cambia el valor del cuentakilometros y cambia el color del mismo si es necesario
      * Se ejecuta cada vez que el LocationListener se actualiza
      *
-     * @param vel Nuevo valor de velocidad a mostrar
+     * @param velocidad Nuevo valor de velocidad a mostrar
      */
-    public void actualizarKM(int vel) {
+    public void actualizarKM(float velocidad) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        String unit = sp.getString("unidades", "km/h");
+
+        if (unit == "km/h")
+            velocidad *= 3.6;
+        else if (unit == "mph")
+            velocidad *= 2.23694;
+
+        int vel = (int) velocidad;
+
+        if (vel > 10 && sp.getBoolean("modo_seguro", false))
+            vel += 10;
+
         km.setText(Integer.toString(vel));
+        textKMH.setText(unit);
 
         if (vel >= limite) //Estamos por encima del limite
         {
@@ -126,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-        float batteryPct = level / (float)scale;
-        bateria.setText(Integer.toString((int) batteryPct*100)+"%");
+        float batteryPct = (level / (float)scale) * 100;
+        bateria.setText(Integer.toString((int) batteryPct)+"%");
     }
 
     /**
@@ -139,6 +167,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         actualizarKM(vel);
         actualizarLimite();
         actualizarBateria();
+
+        //Modo espejo?
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sp.getBoolean("modo_espejo", false))
+            findViewById(R.id.espejable).setScaleX(-1f);
+        else
+            findViewById(R.id.espejable).setScaleX(1f);
+
     }
 
     /**
@@ -195,11 +231,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
-        switch (limite)
-        {
-            case 120: limite = 100; break;
-            default: limite = 120; break;
-        }
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (limite == Integer.parseInt(sp.getString("limit120", "120")))
+            limite = Integer.parseInt(sp.getString("limit100", "100"));
+        else
+            limite = Integer.parseInt(sp.getString("limit120", "120"));
 
         actualizarLimite();
         return true;
@@ -207,10 +244,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        if (limite == 80)
-            limite = 60;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (limite == Integer.parseInt(sp.getString("limit80", "120")))
+            limite = Integer.parseInt(sp.getString("limit60", "100"));
         else
-            limite = 80;
+            limite = Integer.parseInt(sp.getString("limit80", "120"));
 
         actualizarLimite();
         return true;
@@ -286,5 +325,16 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private void onSwipeLeft() {
         musicControl(PlayerControles.NEXT);
+    }
+
+    public void abrirConfig(View v) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        lm.removeUpdates(mls);
     }
 }

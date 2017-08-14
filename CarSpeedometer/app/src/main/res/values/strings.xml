@@ -7,11 +7,11 @@
     <string name="modoseguridad_preference">Modo Seguro</string>
     <string name="modoseguridad_desc">Incrementa en 10 unidades el valor mostrado</string>
 
-    <string name="unidades_preference">Unidad de medida</string>
+    <string name="unidades_preference">Unidad métrica utilizada</string>
 
     <string-array name="unidades_array">
         <item>Metros por segundo (m/s)</item>
-        <item>Kilometros por hora (km/h)</item>
+        <item name="unidades_default">Kilometros por hora (km/h)</item>
         <item>Millas por hora (mph)</item>
     </string-array>
 
