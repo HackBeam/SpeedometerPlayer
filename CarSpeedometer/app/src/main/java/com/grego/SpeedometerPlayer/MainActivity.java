@@ -24,6 +24,8 @@ import android.view.WindowManager;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import static android.location.Criteria.ACCURACY_HIGH;
+
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private LocationManager lm;
@@ -53,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         lp.screenBrightness = 1.0f;
         getWindow().setAttributes(lp);
 
-        limite = 120;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        limite = Integer.parseInt(sp.getString("limit120", "120"));
         km = (TextView) findViewById(R.id.kmh);
         textKMH = (TextView) findViewById(R.id.textKMH);
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -95,20 +98,26 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      * @param velocidad Nuevo valor de velocidad a mostrar
      */
     public void actualizarKM(float velocidad) {
+
+        float v = velocidad;
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String unit = sp.getString("unidades", "km/h");
 
-        if (unit == "km/h")
-            velocidad *= 3.6;
-        else if (unit == "mph")
-            velocidad *= 2.23694;
+        if (unit.equals("km/h"))
+            v *= 3.6;
+        else if (unit.equals("mph"))
+            v *= 2.23694;
 
-        int vel = (int) velocidad;
+        int vel = (int) v;
 
         if (vel > 10 && sp.getBoolean("modo_seguro", false))
             vel += 10;
 
-        km.setText(Integer.toString(vel));
+        if (vel < 0)
+            km.setText("---");
+        else
+            km.setText(Integer.toString(vel));
+
         textKMH.setText(unit);
 
         if (vel >= limite) //Estamos por encima del limite
@@ -162,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      * Actualiza todos los elementos de la interfaz
      */
     public void actualizarInterfaz() {
-        int vel = mls.velocidad;
+        float vel = mls.velocidad;
 
         actualizarKM(vel);
         actualizarLimite();
@@ -217,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case 1: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, mls);
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0.1f, mls);
                 } else {
                     km.setText("No GPS");
                 }

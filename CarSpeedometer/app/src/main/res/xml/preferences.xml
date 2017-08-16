@@ -12,7 +12,7 @@
         android:summary="@string/modoseguridad_desc"
         android:title="@string/modoseguridad_preference" />
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="km/h"
         android:entries="@array/unidades_array"
         android:entryValues="@array/unidades_values"
         android:key="unidades"

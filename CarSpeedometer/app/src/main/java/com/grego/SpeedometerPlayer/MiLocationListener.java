@@ -10,15 +10,17 @@ import android.os.Bundle;
 
 public class MiLocationListener implements LocationListener {
     private MainActivity act;
-    public int velocidad;
+    public float velocidad;
 
     MiLocationListener(MainActivity ma) {
+        velocidad = -1;
         act = ma;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        act.actualizarKM(location.getSpeed());
+        velocidad = location.getSpeed();
+        act.actualizarKM(velocidad);
     }
 
     @Override
