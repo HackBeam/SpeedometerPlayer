@@ -1,6 +1,8 @@
 package com.grego.SpeedometerPlayer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,6 +16,7 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -23,6 +26,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextClock;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 import static android.location.Criteria.ACCURACY_HIGH;
 
@@ -37,15 +42,21 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public TextView limit_text;
     private TextClock reloj;
     private GestureDetectorCompat gd;
-    private Intent batteryStatus;
+    private BroadcastReceiver batteryReceiver;
 
     private static final int SWIPE_THRESHOLD = 100;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         super.onCreate(savedInstanceState);
+
+        //Comprobar si ya tenemos permiso GPS
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //Pedir permiso GPS
+        }
+
         setContentView(R.layout.activity_main);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //Load default preferences
@@ -55,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         lp.screenBrightness = 1.0f;
         getWindow().setAttributes(lp);
 
+        //Cargar preferencias
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         limite = Integer.parseInt(sp.getString("limit120", "120"));
         km = (TextView) findViewById(R.id.kmh);
@@ -62,16 +74,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mls = new MiLocationListener(this);
 
+        //Obtener referencias de objetos de interfaz
         bateria = (TextView) findViewById(R.id.bateria);
         limit_text = (TextView) findViewById(R.id.limite);
         reloj = (TextClock) findViewById(R.id.textClock);
 
-        gd = new GestureDetectorCompat(this, this);
-        gd.setOnDoubleTapListener(this);
-
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = this.registerReceiver(null, ifilter);
-
+        //Establecer la fuente de la interfaz
         Typeface type = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
         km.setTypeface(type);
         textKMH.setTypeface(type);
@@ -79,7 +87,25 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         limit_text.setTypeface(type);
         reloj.setTypeface(type);
 
+        //Setear detector de gestos
+        gd = new GestureDetectorCompat(this, this);
+        gd.setOnDoubleTapListener(this);
+
+        //Setear BroadcastReceiver para bateria
+        batteryReceiver = new BatteryBroadcastReceiver();
+
         actualizarInterfaz();
+    }
+
+    @Override
+    protected void onStart() {
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        super.onStart();
+    }
+    @Override
+    protected void onStop() {
+        unregisterReceiver(batteryReceiver);
+        super.onStop();
     }
 
     @Override
@@ -110,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         int vel = (int) v;
 
-        if (vel > 10 && sp.getBoolean("modo_seguro", false))
-            vel += 10;
+        if (vel > 20)
+            vel += sp.getInt("modo_seguro", 0);
 
         if (vel < 0)
             km.setText("---");
@@ -152,19 +178,28 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      */
     private void actualizarLimite() {
         limit_text.setText(Integer.toString(limite));
-        actualizarBateria();
+        //actualizarBateria();
     }
 
     /**
      * Actualiza el valor mostrado de bateria
      * Se ejecuta cada vez que interactuamos con la pantalla
      */
-    private void actualizarBateria() {
+    /*private void actualizarBateria() {
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
         float batteryPct = (level / (float)scale) * 100;
         bateria.setText(Integer.toString((int) batteryPct)+"%");
+    }
+*/
+    private class BatteryBroadcastReceiver extends BroadcastReceiver {
+        private final static String BATTERY_LEVEL = "level";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BATTERY_LEVEL, 0);
+            bateria.setText(level + "%");
+        }
     }
 
     /**
@@ -175,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         actualizarKM(vel);
         actualizarLimite();
-        actualizarBateria();
+        //actualizarBateria();
 
         //Modo espejo?
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
@@ -192,22 +227,36 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      * @param mode Accion a realizar: Atras, Adelante o Play/pausa
      */
     public void musicControl(PlayerControles mode) {
-        AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        //AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        String keyCommand = "input keyevent ";
 
         if(mode == PlayerControles.NEXT)
         {
-            KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
-            mAudioManager.dispatchMediaKeyEvent(event);
+            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
+            //mAudioManager.dispatchMediaKeyEvent(event);
+            keyCommand += KeyEvent.KEYCODE_MEDIA_NEXT;
         }
         else if(mode == PlayerControles.PLAYPAUSE)
         {
-            KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            mAudioManager.dispatchMediaKeyEvent(event);
+            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+            //mAudioManager.dispatchMediaKeyEvent(event);
+            keyCommand += KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
         }
         else if(mode == PlayerControles.PREV)
         {
-            KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-            mAudioManager.dispatchMediaKeyEvent(event);
+            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+            //mAudioManager.dispatchMediaKeyEvent(event);
+            keyCommand += KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+        }
+
+        try
+        {
+            Runtime.getRuntime().exec(keyCommand);
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         actualizarInterfaz();
@@ -221,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      * @param permissions
      * @param grantResults
      */
+    @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {

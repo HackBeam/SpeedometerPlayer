@@ -6,11 +6,13 @@
         android:key="modo_espejo"
         android:summary="@string/modoespejo_desc"
         android:title="@string/modoespejo_preference" />
-    <SwitchPreference
-        android:defaultValue="false"
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/modoseguridad_descs"
+        android:entryValues="@array/modoseguridad_valores"
         android:key="modo_seguro"
-        android:summary="@string/modoseguridad_desc"
-        android:title="@string/modoseguridad_preference" />
+        android:title="@string/modoseguridad_preference"
+        android:summary="%s"/>
     <ListPreference
         android:defaultValue="km/h"
         android:entries="@array/unidades_array"

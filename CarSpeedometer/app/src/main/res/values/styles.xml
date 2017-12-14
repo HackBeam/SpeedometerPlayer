@@ -6,6 +6,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@android:color/background_dark</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
+        <item name="android:textColorSecondaryInverse">@android:color/background_light</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+        <item name="colorSwitchThumbNormal">@color/colorAccent</item>
     </style>
 
 </resources>

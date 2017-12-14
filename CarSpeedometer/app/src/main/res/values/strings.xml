@@ -4,8 +4,23 @@
     <string name="modoespejo_preference">Modo Espejo</string>
     <string name="modoespejo_desc">Invierte la pantalla para reflejarla en el cristal</string>
 
-    <string name="modoseguridad_preference">Modo Seguro</string>
-    <string name="modoseguridad_desc">Incrementa en 10 unidades el valor mostrado</string>
+    <string name="modoseguridad_preference">Margen de seguridad</string>
+
+    <string-array name="modoseguridad_descs">
+        <item>No incrementar el valor mostrado</item>
+        <item>+5 unidades</item>
+        <item>+10 unidades</item>
+        <item>+15 unidades</item>
+        <item>+20 unidades</item>
+    </string-array>
+
+    <string-array name="modoseguridad_valores">
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
 
     <string name="unidades_preference">Unidad métrica utilizada</string>
 
