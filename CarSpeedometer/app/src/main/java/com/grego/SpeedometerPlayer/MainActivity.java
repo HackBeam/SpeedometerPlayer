@@ -1,6 +1,8 @@
 package com.grego.SpeedometerPlayer;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,8 +14,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.Image;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +28,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -33,16 +38,21 @@ import static android.location.Criteria.ACCURACY_HIGH;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
-    private LocationManager lm;
-    private MiLocationListener mls;
-    private int limite;
     public TextView km;
     public TextView textKMH;
     public TextView bateria;
     public TextView limit_text;
+    public ImageView imgPlay;
+    public ImageView imgPause;
+    public ImageView imgNext;
+    public ImageView imgPrev;
+
     private TextClock reloj;
     private GestureDetectorCompat gd;
     private BroadcastReceiver batteryReceiver;
+    private LocationManager lm;
+    private MiLocationListener mls;
+    private int limite;
 
     private static final int SWIPE_THRESHOLD = 100;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
@@ -78,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         bateria = (TextView) findViewById(R.id.bateria);
         limit_text = (TextView) findViewById(R.id.limite);
         reloj = (TextClock) findViewById(R.id.textClock);
+        imgPlay = (ImageView) findViewById(R.id.imagePlay);
+        imgPause = (ImageView) findViewById(R.id.imagePause);
+        imgNext = (ImageView) findViewById(R.id.imageNext);
+        imgPrev = (ImageView) findViewById(R.id.imagePrev);
 
         //Establecer la fuente de la interfaz
         Typeface type = Typeface.createFromAsset(getAssets(),"fonts/digital-7.ttf");
@@ -235,18 +249,22 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
             //mAudioManager.dispatchMediaKeyEvent(event);
             keyCommand += KeyEvent.KEYCODE_MEDIA_NEXT;
+            FadeInImage(imgNext);
         }
         else if(mode == PlayerControles.PLAYPAUSE)
         {
             //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
             //mAudioManager.dispatchMediaKeyEvent(event);
             keyCommand += KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+            FadeInImage(imgPause);
+            FadeInImage(imgPlay);
         }
         else if(mode == PlayerControles.PREV)
         {
             //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
             //mAudioManager.dispatchMediaKeyEvent(event);
             keyCommand += KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+            FadeInImage(imgPrev);
         }
 
         try
@@ -395,5 +413,49 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected void onDestroy() {
         super.onDestroy();
         lm.removeUpdates(mls);
+    }
+
+    public void FadeInImage(ImageView img)
+    {
+        int animationDuration = 1000;
+
+        img.animate()
+                .alpha(1f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        //FadeOut con un Delay
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FadeOutAll();
+            }
+        }, animationDuration);
+    }
+
+    private void FadeOutAll()
+    {
+        int animationDuration = 1000;
+
+        imgPrev.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        imgNext.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        imgPause.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        imgPlay.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(null);
     }
 }
