@@ -59,14 +59,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //Pedir permiso GPS
+
         super.onCreate(savedInstanceState);
-
-        //Comprobar si ya tenemos permiso GPS
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); //Pedir permiso GPS
-        }
-
         setContentView(R.layout.activity_main);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //Load default preferences
