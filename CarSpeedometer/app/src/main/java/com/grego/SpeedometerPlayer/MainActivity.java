@@ -134,19 +134,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      */
     public void actualizarKM(float velocidad) {
 
-        float v = velocidad;
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         String unit = sp.getString("unidades", "km/h");
 
-        if (unit.equals("km/h"))
-            v *= 3.6;
-        else if (unit.equals("mph"))
-            v *= 2.23694;
+        int vel = (int) velocidad;
 
-        int vel = (int) v;
+        if (unit.equals("km/h"))
+            vel = (int)(velocidad * 3.6);
+        else if (unit.equals("mph"))
+            vel = (int)(velocidad * 2.23694);
 
         if (vel > 20)
-            vel += sp.getInt("modo_seguro", 0);
+            vel += Integer.parseInt(sp.getString("modo_seguro", "0"));
 
         if (vel < 0)
             km.setText("---");
@@ -268,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
