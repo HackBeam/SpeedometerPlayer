@@ -2,13 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/espejable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
     tools:context="com.grego.SpeedometerPlayer.MainActivity"
-    tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp"
-    android:id="@+id/espejable">
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/kmh"
@@ -32,6 +32,9 @@
         android:id="@+id/textKMH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="49dp"
+        android:layout_marginRight="49dp"
+        android:layout_marginTop="100dp"
         android:shadowColor="@android:color/holo_blue_light"
         android:shadowDx="0"
         android:shadowDy="0"
@@ -39,49 +42,39 @@
         android:text="km/h"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="40sp"
-        android:layout_marginRight="49dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="49dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextClock
         android:id="@+id/textClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
         android:shadowColor="@android:color/holo_blue_light"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="20"
         android:textColor="@android:color/holo_blue_light"
         android:textSize="50sp"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="40dp"
-        android:layout_marginStart="30dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
-        android:id="@+id/bateria"
+    <com.grego.SpeedometerPlayer.Compounds.BatteryDisplay
+        android:id="@+id/battery_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="49dp"
-        android:shadowColor="@android:color/holo_blue_light"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="20"
-        android:text="0%"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="50sp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="49dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/limite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="38dp"
         android:shadowColor="@android:color/holo_red_dark"
         android:shadowDx="0"
         android:shadowDy="0"
@@ -90,9 +83,8 @@
         android:textColor="@android:color/holo_red_dark"
         android:textSize="56sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="38dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageButton
         android:id="@+id/opt_button"

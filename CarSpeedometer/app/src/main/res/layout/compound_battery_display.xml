@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/battery_level"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="---"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/battery_percent_symbol"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/battery_percent_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="%"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintEnd_toStartOf="@+id/frameLayout"
+        tools:layout_editor_absoluteX="292dp" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="56dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/battery_fill"
+            android:layout_width="27dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="13dp"
+            android:transformPivotY="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/battery_icon"
+            app:layout_constraintEnd_toEndOf="@+id/battery_icon"
+            app:layout_constraintStart_toStartOf="@+id/battery_icon"
+            app:layout_constraintTop_toTopOf="@+id/battery_icon"
+            app:layout_constraintVertical_bias="0.6"
+            app:srcCompat="@color/normal" />
+
+        <ImageView
+            android:id="@+id/battery_icon"
+            android:layout_width="56dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:tint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_battery_body" />
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>

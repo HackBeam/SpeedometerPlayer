@@ -20,7 +20,7 @@ public class MiLocationListener implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         velocidad = location.getSpeed();
-        act.actualizarKM(velocidad);
+        act.UpdateShowingSpeed(velocidad);
     }
 
     @Override
