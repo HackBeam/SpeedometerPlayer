@@ -3,7 +3,6 @@ package com.grego.SpeedometerPlayer.Compounds;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +12,9 @@ import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.Services.Implementations.IBatteryListener;
 import com.grego.SpeedometerPlayer.R;
 
+/**
+ * UI component to display the battery level both with text and fillable icon
+ */
 public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
 {
     private final static int LOW_BATTERY_LEVEL = 25;
@@ -45,6 +47,13 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
         Initialize();
     }
 
+    /**
+     * Initializes the component.
+     * - Inflates it's XML.
+     * - Gets the UI objects.
+     * - Establish all the default values.
+     * - Subscribes to the battery service to start listening battery changes.
+     */
     private void Initialize()
     {
         inflate(getContext(), R.layout.compound_battery_display, this);
@@ -57,14 +66,30 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
             batteryLevelText = (TextView) findViewById(R.id.battery_level);
             batteryPercentText = (TextView) findViewById(R.id.battery_percent_symbol);
 
+            // Get and set default parameters
             fillParams = batteryFill.getLayoutParams();
             maxFillHeight = fillParams.height;
             batteryLevelText.setTypeface(Core.Data.DefaultFont);
             batteryPercentText.setTypeface(Core.Data.DefaultFont);
-
-            // Subscribe to listen battery changes
-            Core.Services.Battery.Subscribe(this);
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow()
+    {
+        super.onAttachedToWindow();
+
+        // Subscribe to listen battery changes
+        Core.Services.Battery.Subscribe(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow()
+    {
+        super.onDetachedFromWindow();
+
+        // Unsubscribe to listen battery changes
+        Core.Services.Battery.Unsubscribe(this);
     }
 
     @Override
@@ -74,6 +99,9 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
         UpdateUI();
     }
 
+    /**
+     * Updates the displaying UI of the component with the stored values.
+     */
     private void UpdateUI()
     {
         int colorToApply = Core.Data.Colors.normal;
@@ -97,6 +125,10 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
         UpdateBatteryIcon(colorToApply);
     }
 
+    /**
+     * Updates the icon collor and fill rate.
+     * @param colorToApply The color to asign to the icon.
+     */
     private void UpdateBatteryIcon(int colorToApply)
     {
         batteryIcon.setColorFilter(colorToApply);

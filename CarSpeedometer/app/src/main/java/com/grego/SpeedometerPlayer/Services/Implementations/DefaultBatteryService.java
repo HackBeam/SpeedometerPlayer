@@ -10,21 +10,30 @@ import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Battery info provider service listening to battery level changes.
+ */
 public class DefaultBatteryService extends BroadcastReceiver implements IBatteryService
 {
     private final static String BATTERY_LEVEL_KEY = "level";
 
     private LinkedList<IBatteryListener> subscribers;
+    private int cachedBatteryLevel = -1;
+
+    public DefaultBatteryService()
+    {
+        subscribers = new LinkedList<>();
+    }
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        int level = intent.getIntExtra(BATTERY_LEVEL_KEY, 0);
+        cachedBatteryLevel = intent.getIntExtra(BATTERY_LEVEL_KEY, 0);
 
         Iterator<IBatteryListener> iterator = subscribers.iterator();
         while (iterator.hasNext())
         {
-            iterator.next().OnBatteryLevelReceived(level);
+            iterator.next().OnBatteryLevelReceived(cachedBatteryLevel);
         }
     }
 
@@ -43,12 +52,13 @@ public class DefaultBatteryService extends BroadcastReceiver implements IBattery
     @Override
     public void Subscribe(IBatteryListener listener)
     {
-        if (subscribers == null)
-        {
-            subscribers = new LinkedList<>();
-        }
-
         subscribers.add(listener);
+
+        // Auto-serve cached level
+        if (cachedBatteryLevel != -1)
+        {
+            listener.OnBatteryLevelReceived(cachedBatteryLevel);
+        }
     }
 
     @Override

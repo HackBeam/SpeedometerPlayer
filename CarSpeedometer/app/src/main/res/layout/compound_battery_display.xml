@@ -12,38 +12,29 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:text="---"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/battery_percent_symbol"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/battery_percent_symbol" />
 
     <TextView
         android:id="@+id/battery_percent_symbol"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:text="%"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintEnd_toStartOf="@+id/frameLayout"
-        tools:layout_editor_absoluteX="292dp" />
+        app:layout_constraintEnd_toStartOf="@+id/frameLayout" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="56dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/battery_fill"
