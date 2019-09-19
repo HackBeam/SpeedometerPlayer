@@ -52,7 +52,6 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
      * - Inflates it's XML.
      * - Gets the UI objects.
      * - Establish all the default values.
-     * - Subscribes to the battery service to start listening battery changes.
      */
     private void Initialize()
     {
@@ -132,6 +131,7 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
     private void UpdateBatteryIcon(int colorToApply)
     {
         batteryIcon.setColorFilter(colorToApply);
+        batteryFill.setColorFilter(colorToApply);
         fillParams.height = batteryLevel * maxFillHeight / 100;
         batteryFill.setLayoutParams(fillParams);
     }
