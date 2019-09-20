@@ -63,11 +63,12 @@ public class Core
         public static Typeface DefaultFont;
         public static Colors Colors;
         public static Preferences Preferences;
+        public static int currentLimit;
     }
 
     /**
      * Instantiates all the needed services and loads the default data.
-     * Should be called by the very first activiy onCreate.
+     * Should be called by the very first activity onCreate.
      * @param context Context needed for some services and data to be initialized.
      */
     public static void Initialize(Context context)
@@ -80,5 +81,6 @@ public class Core
         Data.DefaultFont = Typeface.createFromAsset(context.getAssets(), "fonts/digital-7.ttf");
         Data.Colors = new Colors(context);
         Data.Preferences = new Preferences(context);
+        Data.currentLimit = Data.Preferences.highLimitDoubleTap;
     }
 }
