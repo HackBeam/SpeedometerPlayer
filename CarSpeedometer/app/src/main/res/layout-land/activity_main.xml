@@ -10,38 +10,14 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
-    <TextView
-        android:id="@+id/kmh"
+    <com.grego.SpeedometerPlayer.Compounds.SpeedometerDisplay
+        android:id="@+id/limit_speedometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="100dp"
         android:layout_marginTop="0dp"
-        android:shadowColor="@android:color/holo_blue_light"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="20"
-        android:text="---"
-        android:textAlignment="textEnd"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="200sp"
-        app:layout_constraintRight_toLeftOf="@+id/textKMH"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textKMH"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="49dp"
-        android:layout_marginTop="100dp"
-        android:shadowColor="@android:color/holo_blue_light"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="20"
-        android:text="km/h"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="40sp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextClock
         android:id="@+id/textClock"
