@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
-import com.grego.SpeedometerPlayer.Services.Implementations.IBatteryListener;
+import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 import com.grego.SpeedometerPlayer.R;
 
 /**
@@ -125,7 +125,7 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
     }
 
     /**
-     * Updates the icon collor and fill rate.
+     * Updates the icon color and fill rate.
      * @param colorToApply The color to asign to the icon.
      */
     private void UpdateBatteryIcon(int colorToApply)

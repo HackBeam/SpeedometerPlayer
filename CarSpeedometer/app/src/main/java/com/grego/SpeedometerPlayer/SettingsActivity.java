@@ -13,14 +13,19 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        //BRILLO 100%
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness = 1.0f;
-        getWindow().setAttributes(lp);
+        Core.Helpers.SetMaxScreenBrightness(this);
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Core.Data.Preferences.LoadPreferences(this);
+    }
+
 }

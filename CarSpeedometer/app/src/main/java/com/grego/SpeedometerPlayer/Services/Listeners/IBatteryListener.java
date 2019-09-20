@@ -1,4 +1,4 @@
-package com.grego.SpeedometerPlayer.Services.Implementations;
+package com.grego.SpeedometerPlayer.Services.Listeners;
 
 /**
  * Interface to be implemented for classes which wants to listen battery changes.

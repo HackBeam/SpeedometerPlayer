@@ -1,12 +1,17 @@
 package com.grego.SpeedometerPlayer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.grego.SpeedometerPlayer.DataContainers.Colors;
+import com.grego.SpeedometerPlayer.DataContainers.Preferences;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
-import com.grego.SpeedometerPlayer.Services.Implementations.DefaultBatteryService;
+import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLocationService;
 
 /**
  * Container class for Services, Helpers and Global Data
@@ -19,6 +24,7 @@ public class Core
     public static class Services
     {
         public static IBatteryService Battery;
+        public static ILocationService Location;
     }
 
     /**
@@ -26,10 +32,26 @@ public class Core
      */
     public static class Helpers
     {
+        /**
+         * Applies color and shadow to the given text view.
+         * @param textView The text to colorize.
+         * @param color The color to apply.
+         */
         public static void SetColorToTextView(TextView textView, int color)
         {
             textView.setTextColor(color);
             textView.setShadowLayer(20, 0, 0, color);
+        }
+
+        /**
+         * Sets the brightness of the screen to 100%
+         * @param activity The activity calling this method, needed to access to the screen parameters.
+         */
+        public static void SetMaxScreenBrightness(Activity activity)
+        {
+            WindowManager.LayoutParams layoutParams = activity.getWindow().getAttributes();
+            layoutParams.screenBrightness = 1.0f;
+            activity.getWindow().setAttributes(layoutParams);
         }
     }
 
@@ -39,35 +61,8 @@ public class Core
     public static class Data
     {
         public static Typeface DefaultFont;
-
-        /**
-         * Container class for default Color data.
-         * This provides faster access than always read from colors.xml
-         */
-        public static class Colors
-        {
-            // Make always sure to match every color defined on colors.xml
-            public static int normal;
-            public static int limitDanger;
-            public static int limitWarning;
-            public static int cruiseGood;
-            public static int cruiseAbove;
-            public static int cruiseBelow;
-
-            /**
-             * Initializes all the colors variables with their default values stored in colors.xml.
-             * @param context Context needed to read colors.xml
-             */
-            private static void LoadDefaults(Context context)
-            {
-                normal = ContextCompat.getColor(context, R.color.normal);
-                limitDanger = ContextCompat.getColor(context, R.color.limit_danger);
-                limitWarning = ContextCompat.getColor(context, R.color.limit_warning);
-                cruiseGood = ContextCompat.getColor(context, R.color.cruise_good);
-                cruiseAbove = ContextCompat.getColor(context, R.color.cruise_above);
-                cruiseBelow = ContextCompat.getColor(context, R.color.cruise_below);
-            }
-        }
+        public static Colors Colors;
+        public static Preferences Preferences;
     }
 
     /**
@@ -79,9 +74,11 @@ public class Core
     {
         // Services
         Services.Battery = new DefaultBatteryService();
+        Services.Location = new DefaultLocationService(context);
 
         // Default Data
         Data.DefaultFont = Typeface.createFromAsset(context.getAssets(), "fonts/digital-7.ttf");
-        Data.Colors.LoadDefaults(context);
+        Data.Colors = new Colors(context);
+        Data.Preferences = new Preferences(context);
     }
 }

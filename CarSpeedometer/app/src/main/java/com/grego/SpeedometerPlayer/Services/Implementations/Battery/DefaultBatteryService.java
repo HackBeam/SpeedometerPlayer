@@ -1,4 +1,4 @@
-package com.grego.SpeedometerPlayer.Services.Implementations;
+package com.grego.SpeedometerPlayer.Services.Implementations.Battery;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
+import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 
 import java.util.Iterator;
 import java.util.LinkedList;

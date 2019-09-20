@@ -1,7 +1,7 @@
 package com.grego.SpeedometerPlayer.Services.Definitions;
 
 import android.content.Context;
-import com.grego.SpeedometerPlayer.Services.Implementations.IBatteryListener;
+import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 
 /**
  * Interface to be implemented by a Battery info provider service.
