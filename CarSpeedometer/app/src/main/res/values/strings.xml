@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">SpeedometerPlayer</string>
 
-    <string name="modoespejo_preference">Modo Espejo</string>
-    <string name="modoespejo_desc">Invierte la pantalla para reflejarla en el cristal</string>
+    <string name="mirror_mode_preference_name">Modo Espejo</string>
+    <string name="mirror_mode_preference_description">Invierte la pantalla para reflejarla en el cristal</string>
 
-    <string name="modoseguridad_preference">Margen de seguridad</string>
+    <string name="safety_margin_preference_name">Margen de seguridad</string>
 
-    <string-array name="modoseguridad_descs">
+    <string-array name="safety_margin_preference_descriptions">
         <item>No incrementar el valor mostrado</item>
         <item>+5 unidades</item>
         <item>+10 unidades</item>
@@ -14,7 +14,7 @@
         <item>+20 unidades</item>
     </string-array>
 
-    <string-array name="modoseguridad_valores">
+    <string-array name="safety_margin_preference_values">
         <item>0</item>
         <item>5</item>
         <item>10</item>
@@ -22,26 +22,26 @@
         <item>20</item>
     </string-array>
 
-    <string name="unidades_preference">Unidad métrica utilizada</string>
+    <string name="speed_unit_preference_name">Unidad métrica utilizada</string>
 
-    <string-array name="unidades_array">
+    <string-array name="speed_unit_preference_descriptions">
         <item>Metros por segundo (m/s)</item>
         <item name="unidades_default">Kilometros por hora (km/h)</item>
         <item>Millas por hora (mph)</item>
     </string-array>
 
-    <string-array name="unidades_values">
+    <string-array name="speed_unit_preference_values">
         <item>m/s</item>
         <item>km/h</item>
         <item>mph</item>
     </string-array>
 
-    <string name="limite120">Límite alto con un toque</string>
-    <string name="limite100">Límite  bajo con un toque</string>
-    <string name="limite80">Límite alto con doble toque</string>
-    <string name="lmimite60">Límite bajo con doble toque</string>
+    <string name="high_limit_one_tap_preference_name">Límite alto con un toque</string>
+    <string name="low_limit_one_tap_preference_name">Límite  bajo con un toque</string>
+    <string name="high_limit_double_tap_preference_name">Límite alto con doble toque</string>
+    <string name="low_limit_double_tap_preference_name">Límite bajo con doble toque</string>
 
-    <string-array name="limites_velocidad">
+    <string-array name="speed_limits">
         <item>10</item>
         <item>20</item>
         <item>30</item>

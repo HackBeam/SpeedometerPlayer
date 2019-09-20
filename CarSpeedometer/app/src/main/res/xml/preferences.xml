@@ -3,49 +3,49 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="modo_espejo"
-        android:summary="@string/modoespejo_desc"
-        android:title="@string/modoespejo_preference" />
+        android:key="mirror_mode"
+        android:summary="@string/mirror_mode_preference_description"
+        android:title="@string/mirror_mode_preference_name" />
     <ListPreference
         android:defaultValue="0"
-        android:entries="@array/modoseguridad_descs"
-        android:entryValues="@array/modoseguridad_valores"
-        android:key="modo_seguro"
-        android:title="@string/modoseguridad_preference"
+        android:entries="@array/safety_margin_preference_descriptions"
+        android:entryValues="@array/safety_margin_preference_values"
+        android:key="safety_margin"
+        android:title="@string/safety_margin_preference_name"
         android:summary="%s"/>
     <ListPreference
         android:defaultValue="km/h"
-        android:entries="@array/unidades_array"
-        android:entryValues="@array/unidades_values"
-        android:key="unidades"
-        android:title="@string/unidades_preference"
+        android:entries="@array/speed_unit_preference_descriptions"
+        android:entryValues="@array/speed_unit_preference_values"
+        android:key="speed_unit"
+        android:title="@string/speed_unit_preference_name"
         android:summary="%s"/>
     <ListPreference
         android:defaultValue="120"
-        android:entries="@array/limites_velocidad"
-        android:entryValues="@array/limites_velocidad"
-        android:key="limit120"
-        android:title="@string/limite120"
+        android:entries="@array/speed_limits"
+        android:entryValues="@array/speed_limits"
+        android:key="high_limit_one_tap"
+        android:title="@string/high_limit_one_tap_preference_name"
         android:summary="%s"/>
     <ListPreference
         android:defaultValue="100"
-        android:entries="@array/limites_velocidad"
-        android:entryValues="@array/limites_velocidad"
-        android:key="limit100"
-        android:title="@string/limite100"
+        android:entries="@array/speed_limits"
+        android:entryValues="@array/speed_limits"
+        android:key="low_limit_one_tap"
+        android:title="@string/low_limit_one_tap_preference_name"
         android:summary="%s"/>
     <ListPreference
         android:defaultValue="80"
-        android:entries="@array/limites_velocidad"
-        android:entryValues="@array/limites_velocidad"
-        android:key="limit80"
-        android:title="@string/limite80"
+        android:entries="@array/speed_limits"
+        android:entryValues="@array/speed_limits"
+        android:key="high_limit_double_tap"
+        android:title="@string/high_limit_double_tap_preference_name"
         android:summary="%s"/>
     <ListPreference
         android:defaultValue="60"
-        android:entries="@array/limites_velocidad"
-        android:entryValues="@array/limites_velocidad"
-        android:key="limit60"
-        android:title="@string/lmimite60"
+        android:entries="@array/speed_limits"
+        android:entryValues="@array/speed_limits"
+        android:key="low_limit_double_tap"
+        android:title="@string/low_limit_double_tap_preference_name"
         android:summary="%s"/>
 </PreferenceScreen>
