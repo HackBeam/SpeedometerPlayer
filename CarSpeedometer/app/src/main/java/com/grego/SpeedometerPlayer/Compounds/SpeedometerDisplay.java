@@ -76,7 +76,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     /**
      * Updates the displaying UI of the component with the stored values.
      */
-    private void UpdateUI()
+    public void UpdateUI()
     {
         speedUnitsText.setText(Core.Data.Preferences.speedUnit);
 

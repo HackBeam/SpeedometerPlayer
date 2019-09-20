@@ -1,12 +1,8 @@
 package com.grego.SpeedometerPlayer;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -17,31 +13,27 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
+import com.grego.SpeedometerPlayer.Compounds.SpeedometerDisplay;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
 {
-    public TextView km;
-    public TextView textKMH;
     public TextView limit_text;
     public ImageView imgPlay;
     public ImageView imgPause;
     public ImageView imgNext;
     public ImageView imgPrev;
     private BatteryDisplay batteryDisplay;
+    private SpeedometerDisplay speedometerDisplay;
 
     private TextClock reloj;
     private GestureDetectorCompat gd;
-    private LocationManager lm;
-    private MiLocationListener mls;
-    private int limite;
 
     private static final int SWIPE_THRESHOLD = 100;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
@@ -57,31 +49,21 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //Load default preferences
 
-        //BRILLO 100%
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.screenBrightness = 1.0f;
-        getWindow().setAttributes(lp);
-
-        //Cargar preferencias
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        limite = Integer.parseInt(sp.getString("limit120", "120"));
-        km = (TextView) findViewById(R.id.kmh);
-        textKMH = (TextView) findViewById(R.id.textKMH);
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mls = new MiLocationListener(this);
+        Core.Helpers.SetMaxScreenBrightness(this);
 
         //Obtener referencias de objetos de interfaz
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
-        limit_text = (TextView) findViewById(R.id.limite);
+        speedometerDisplay = (SpeedometerDisplay) findViewById(R.id.limit_speedometer);
         reloj = (TextClock) findViewById(R.id.textClock);
+
+        // LEGACY
+        limit_text = (TextView) findViewById(R.id.limite);
         imgPlay = (ImageView) findViewById(R.id.imagePlay);
         imgPause = (ImageView) findViewById(R.id.imagePause);
         imgNext = (ImageView) findViewById(R.id.imageNext);
         imgPrev = (ImageView) findViewById(R.id.imagePrev);
 
         //Establecer la fuente de la interfaz
-        km.setTypeface(Core.Data.DefaultFont);
-        textKMH.setTypeface(Core.Data.DefaultFont);
         limit_text.setTypeface(Core.Data.DefaultFont);
         reloj.setTypeface(Core.Data.DefaultFont);
 
@@ -89,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         gd = new GestureDetectorCompat(this, this);
         gd.setOnDoubleTapListener(this);
 
-        actualizarInterfaz();
+        UpdateUI();
     }
 
     @Override
@@ -111,74 +93,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     {
         super.onResume();
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        limite = Integer.parseInt(sp.getString("limit120", "120"));
-        actualizarInterfaz();
-    }
-
-    /**
-     * Changes the speedometer value and color (if needed)
-     * Called on every LocationListener update.
-     *
-     * @param newSpeed The new speed value to show.
-     */
-    public void UpdateShowingSpeed(float newSpeed)
-    {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String unit = sp.getString("unidades", "km/h");
-
-        int vel = (int) newSpeed;
-
-        if (unit.equals("km/h"))
-        {
-            vel = (int) (newSpeed * 3.6);
-        }
-        else if (unit.equals("mph"))
-        {
-            vel = (int) (newSpeed * 2.23694);
-        }
-
-        if (vel > 20)
-        {
-            vel += Integer.parseInt(sp.getString("modo_seguro", "0"));
-        }
-
-        if (vel < 0)
-        {
-            km.setText("---");
-        }
-        else
-        {
-            km.setText(Integer.toString(vel));
-        }
-
-        textKMH.setText(unit);
-
-        if (vel >= limite) // Above limit
-        {
-            if (vel >= limite + 10) // VERY above limit
-            {
-                km.setTextColor(Color.RED);
-                km.setShadowLayer(20, 0, 0, Color.RED);
-                textKMH.setTextColor(Color.RED);
-                textKMH.setShadowLayer(20, 0, 0, Color.RED);
-            }
-            else
-            {
-                km.setTextColor(Color.parseColor("#feaa0c"));
-                km.setShadowLayer(20, 0, 0, Color.parseColor("#feaa0c"));
-                textKMH.setTextColor(Color.parseColor("#feaa0c"));
-                textKMH.setShadowLayer(20, 0, 0, Color.parseColor("#feaa0c"));
-            }
-        }
-        else
-        {
-            km.setTextColor(Color.parseColor("#33B5E5"));
-            km.setShadowLayer(20, 0, 0, Color.parseColor("#33B5E5"));
-            textKMH.setTextColor(Color.parseColor("#33B5E5"));
-            textKMH.setShadowLayer(20, 0, 0, Color.parseColor("#33B5E5"));
-        }
-
+        UpdateUI();
     }
 
     /**
@@ -186,22 +101,23 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
      */
     private void UpdateShowingLimit()
     {
-        limit_text.setText(Integer.toString(limite));
+        //limit_text.setText(Core.Data.currentLimit); //TODO: Replace with a Limit compound
     }
 
     /**
-     * Actualiza todos los elementos de la interfaz
+     * Updates all elements in the UI
      */
-    public void actualizarInterfaz()
+    public void UpdateUI()
     {
-        float vel = mls.velocidad;
+        batteryDisplay.UpdateUI();
+        speedometerDisplay.UpdateUI();
 
-        UpdateShowingSpeed(vel);
+        //LEGACY
         UpdateShowingLimit();
 
         //Modo espejo?
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean("modo_espejo", false))
+        if (sp.getBoolean("mirror_mode", false))
         {
             findViewById(R.id.espejable).setScaleX(-1f);
         }
@@ -254,37 +170,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             e.printStackTrace();
         }
 
-        actualizarInterfaz();
-    }
-
-    /**
-     * Se ejecuta cuando se solicita permiso para obtener ubicacion
-     * En caso de haber obtenido los permisos, se inicializa el LocationListener
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case 1:
-            {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0.1f, mls);
-                }
-                else
-                {
-                    km.setText("No GPS");
-                }
-                return;
-            }
-            // other 'case' lines to check for other permissions this app might request
-        }
+        UpdateUI();
     }
 
     /** ----- OnDoubleTapListener Methods ----- */
@@ -292,15 +178,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e)
     {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (limite == Integer.parseInt(sp.getString("limit120", "120")))
+        if (Core.Data.currentLimit == Core.Data.Preferences.highLimitOneTap)
         {
-            limite = Integer.parseInt(sp.getString("limit100", "100"));
+            Core.Data.currentLimit = Core.Data.Preferences.lowLimitOneTap;
         }
         else
         {
-            limite = Integer.parseInt(sp.getString("limit120", "120"));
+            Core.Data.currentLimit = Core.Data.Preferences.highLimitOneTap;
         }
 
         UpdateShowingLimit();
@@ -310,15 +194,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onDoubleTap(MotionEvent e)
     {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (limite == Integer.parseInt(sp.getString("limit80", "120")))
+        if (Core.Data.currentLimit == Core.Data.Preferences.highLimitDoubleTap)
         {
-            limite = Integer.parseInt(sp.getString("limit60", "100"));
+            Core.Data.currentLimit = Core.Data.Preferences.lowLimitDoubleTap;
         }
         else
         {
-            limite = Integer.parseInt(sp.getString("limit80", "120"));
+            Core.Data.currentLimit = Core.Data.Preferences.highLimitDoubleTap;
         }
 
         UpdateShowingLimit();
@@ -422,7 +304,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected void onDestroy()
     {
         super.onDestroy();
-        lm.removeUpdates(mls);
+
+        //TODO: Stop all services
     }
 
     public void FadeInImage(ImageView img)

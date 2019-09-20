@@ -23,12 +23,12 @@ public class Preferences
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         mirrorMode = preferences.getBoolean("mirror_mode", false);
-        safetyMargin = preferences.getInt("safety_margin", 0);
+        safetyMargin = Integer.parseInt(preferences.getString("safety_margin", "0"));
         speedUnit = preferences.getString("speed_unit", "km/h");
-        highLimitOneTap = preferences.getInt("high_limit_one_tap", 120);
-        lowLimitOneTap = preferences.getInt("low_limit_one_tap", 100);
-        highLimitDoubleTap = preferences.getInt("high_limit_double_tap", 80);
-        lowLimitDoubleTap = preferences.getInt("low_limit_double_tap", 60);
+        highLimitOneTap = Integer.parseInt(preferences.getString("high_limit_one_tap", "120"));
+        lowLimitOneTap = Integer.parseInt(preferences.getString("low_limit_one_tap", "100"));
+        highLimitDoubleTap = Integer.parseInt(preferences.getString("high_limit_double_tap", "80"));
+        lowLimitDoubleTap = Integer.parseInt(preferences.getString("low_limit_double_tap", "60"));
     }
 
     /* TODO: Implement SavePreferences if needed

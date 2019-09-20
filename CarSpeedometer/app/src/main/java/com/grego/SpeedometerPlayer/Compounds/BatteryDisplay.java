@@ -101,7 +101,7 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
     /**
      * Updates the displaying UI of the component with the stored values.
      */
-    private void UpdateUI()
+    public void UpdateUI()
     {
         int colorToApply = Core.Data.Colors.normal;
 
