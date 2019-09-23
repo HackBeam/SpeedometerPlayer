@@ -1,8 +1,8 @@
 package com.grego.SpeedometerPlayer.DataContainers;
 
-import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
+import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
 
 /**
@@ -19,13 +19,13 @@ public class Colors
     public int cruiseAbove;
     public int cruiseBelow;
 
-    public Colors(Context context)
+    public Colors()
     {
-        normal = ContextCompat.getColor(context, R.color.normal);
-        limitDanger = ContextCompat.getColor(context, R.color.limit_danger);
-        limitWarning = ContextCompat.getColor(context, R.color.limit_warning);
-        cruiseGood = ContextCompat.getColor(context, R.color.cruise_good);
-        cruiseAbove = ContextCompat.getColor(context, R.color.cruise_above);
-        cruiseBelow = ContextCompat.getColor(context, R.color.cruise_below);
+        normal = ContextCompat.getColor(Core.ApplicationContext, R.color.normal);
+        limitDanger = ContextCompat.getColor(Core.ApplicationContext, R.color.limit_danger);
+        limitWarning = ContextCompat.getColor(Core.ApplicationContext, R.color.limit_warning);
+        cruiseGood = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_good);
+        cruiseAbove = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_above);
+        cruiseBelow = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_below);
     }
 }

@@ -4,8 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.grego.SpeedometerPlayer.Core;
+import com.grego.SpeedometerPlayer.R;
+
 public class Preferences
 {
+    //region Hardcoded preferences
+    public final int veryAboveLimitIncrement = 10;
+    //endregion
+
+    //region Preferences from XML
     public boolean mirrorMode;
     public float safetyMargin;
     public String speedUnit;
@@ -13,15 +21,19 @@ public class Preferences
     public int lowLimitOneTap;
     public int highLimitDoubleTap;
     public int lowLimitDoubleTap;
+    //endregion
 
-    public Preferences(Context context)
+    public Preferences()
     {
-        LoadPreferences(context);
+        LoadPreferences();
     }
 
-    public void LoadPreferences(Context context)
+    public void LoadPreferences()
     {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        // If no preferences are saved, create the default ones
+        PreferenceManager.setDefaultValues(Core.ApplicationContext, R.xml.preferences, false);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(Core.ApplicationContext);
         mirrorMode = preferences.getBoolean("mirror_mode", false);
         safetyMargin = Integer.parseInt(preferences.getString("safety_margin", "0"));
         speedUnit = preferences.getString("speed_unit", "km/h");

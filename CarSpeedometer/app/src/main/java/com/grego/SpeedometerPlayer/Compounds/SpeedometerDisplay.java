@@ -14,7 +14,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     private TextView speedValueText;
     private TextView speedUnitsText;
 
-    private int speedValue;
+    private int speedValue = -1;
 
     public SpeedometerDisplay(Context context)
     {
@@ -62,7 +62,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     {
         super.onAttachedToWindow();
 
-        //TODO: Subscribe to listen GPS
+        Core.Services.Location.Subscribe(this);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     {
         super.onDetachedFromWindow();
 
-        //TODO: Unsubscribe to listen GPS
+        Core.Services.Location.Unsubscribe(this);
     }
 
     /**
@@ -91,7 +91,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
 
         if (speedValue >= Core.Data.currentLimit) // Above limit
         {
-            if (speedValue >= Core.Data.currentLimit + 10) // VERY above limit
+            if (speedValue >= Core.Data.currentLimit + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitWarning);
             }

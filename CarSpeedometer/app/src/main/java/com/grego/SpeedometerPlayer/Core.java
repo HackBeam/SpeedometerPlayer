@@ -1,6 +1,7 @@
 package com.grego.SpeedometerPlayer;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.WindowManager;
@@ -18,6 +19,8 @@ import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLoca
  */
 public class Core
 {
+    public static Context ApplicationContext;
+
     /**
      * Container class for Services
      */
@@ -69,18 +72,20 @@ public class Core
     /**
      * Instantiates all the needed services and loads the default data.
      * Should be called by the very first activity onCreate.
-     * @param context Context needed for some services and data to be initialized.
+     * @param appContext The context calling this method. Used only to get the ApplicationContext.
      */
-    public static void Initialize(Context context)
+    public static void Initialize(Context appContext)
     {
+        ApplicationContext = appContext.getApplicationContext();
+
         // Services
         Services.Battery = new DefaultBatteryService();
-        Services.Location = new DefaultLocationService(context);
+        Services.Location = new DefaultLocationService();
 
         // Default Data
-        Data.DefaultFont = Typeface.createFromAsset(context.getAssets(), "fonts/digital-7.ttf");
-        Data.Colors = new Colors(context);
-        Data.Preferences = new Preferences(context);
+        Data.DefaultFont = Typeface.createFromAsset(ApplicationContext.getAssets(), "fonts/digital-7.ttf");
+        Data.Colors = new Colors();
+        Data.Preferences = new Preferences();
         Data.currentLimit = Data.Preferences.highLimitDoubleTap;
     }
 }

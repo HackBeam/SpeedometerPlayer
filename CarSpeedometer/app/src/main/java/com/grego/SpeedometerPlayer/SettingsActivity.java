@@ -25,7 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onPause()
     {
         super.onPause();
-        Core.Data.Preferences.LoadPreferences(this);
+        Core.Data.Preferences.LoadPreferences();
     }
 
 }

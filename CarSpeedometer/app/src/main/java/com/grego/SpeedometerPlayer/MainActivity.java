@@ -1,12 +1,9 @@
 package com.grego.SpeedometerPlayer;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -24,6 +21,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
 {
+    private View activityRoot;
     public TextView limit_text;
     public ImageView imgPlay;
     public ImageView imgPause;
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private BatteryDisplay batteryDisplay;
     private SpeedometerDisplay speedometerDisplay;
 
-    private TextClock reloj;
+    private TextClock clock;
     private GestureDetectorCompat gd;
 
     private static final int SWIPE_THRESHOLD = 100;
@@ -41,20 +39,22 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        // Core initialization
         Core.Initialize(this);
-        ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 1); //Pedir permiso GPS
+        Core.Services.Location.StartListening(this);
 
+        // Self initialization
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false); //Load default preferences
-
         Core.Helpers.SetMaxScreenBrightness(this);
 
-        //Obtener referencias de objetos de interfaz
+        // Get UI references
+        activityRoot = findViewById(R.id.main_activity_root);
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
         speedometerDisplay = (SpeedometerDisplay) findViewById(R.id.limit_speedometer);
-        reloj = (TextClock) findViewById(R.id.textClock);
+        clock = (TextClock) findViewById(R.id.textClock);
+
 
         // LEGACY
         limit_text = (TextView) findViewById(R.id.limite);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         //Establecer la fuente de la interfaz
         limit_text.setTypeface(Core.Data.DefaultFont);
-        reloj.setTypeface(Core.Data.DefaultFont);
+        clock.setTypeface(Core.Data.DefaultFont);
 
         //Setear detector de gestos
         gd = new GestureDetectorCompat(this, this);
@@ -96,6 +96,27 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         UpdateUI();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case 1:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Core.Services.Location.StartListening(this);
+                }
+                else
+                {
+                    //TODO: Maybe show a custom error message?
+                }
+            }
+            // other 'case' lines to check for other permissions this app might request
+        }
+    }
+
     /**
      * Updates the displayed limit value.
      */
@@ -112,20 +133,16 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         batteryDisplay.UpdateUI();
         speedometerDisplay.UpdateUI();
 
-        //LEGACY
-        UpdateShowingLimit();
-
-        //Modo espejo?
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sp.getBoolean("mirror_mode", false))
+        if (Core.Data.Preferences.mirrorMode)
         {
-            findViewById(R.id.espejable).setScaleX(-1f);
+            activityRoot.setScaleX(-1f);
         }
         else
         {
-            findViewById(R.id.espejable).setScaleX(1f);
+            activityRoot.setScaleX(1f);
         }
 
+        UpdateShowingLimit();//LEGACY
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.grego.SpeedometerPlayer.Services.Implementations.Location;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,27 +23,32 @@ public class DefaultLocationService implements ILocationService
     private boolean permissionGranted = false;
 
     private Location cachedLocationData;
-    private int cachedSpeedValue;
+    private int cachedSpeedValue = -1;
 
-    public DefaultLocationService(Context context)
+    public DefaultLocationService()
     {
-        locationManagerAndroid = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManagerAndroid = (LocationManager) Core.ApplicationContext.getSystemService(Context.LOCATION_SERVICE);
         subscribers = new LinkedList<>();
     }
 
     @Override
-    public void StartListening(Context context)
+    public void StartListening(Activity activity)
     {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0.1f, this);
             permissionGranted = true;
         }
+        else
+        {
+            ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 1);
+            // At this point, the activity should call again to the StartListening() method if the requested permission is granted.
+        }
     }
 
     @Override
-    public void StopListening(Context context)
+    public void StopListening()
     {
         if (permissionGranted)
         {
@@ -59,6 +65,10 @@ public class DefaultLocationService implements ILocationService
         if (permissionGranted && cachedLocationData != null)
         {
             listener.OnSpeedChanges(cachedSpeedValue);
+        }
+        else
+        {
+            listener.OnSpeedChanges(-1);
         }
     }
 
