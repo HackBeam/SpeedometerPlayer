@@ -1,7 +1,6 @@
 package com.grego.SpeedometerPlayer;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.WindowManager;
@@ -10,8 +9,10 @@ import android.widget.TextView;
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
 import com.grego.SpeedometerPlayer.DataContainers.Preferences;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
+import com.grego.SpeedometerPlayer.Services.Definitions.ILimitService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Limit.DefaultLimitService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLocationService;
 
 /**
@@ -28,6 +29,7 @@ public class Core
     {
         public static IBatteryService Battery;
         public static ILocationService Location;
+        public static ILimitService Limit;
     }
 
     /**
@@ -66,7 +68,6 @@ public class Core
         public static Typeface DefaultFont;
         public static Colors Colors;
         public static Preferences Preferences;
-        public static int currentLimit;
     }
 
     /**
@@ -78,14 +79,14 @@ public class Core
     {
         ApplicationContext = appContext.getApplicationContext();
 
-        // Services
-        Services.Battery = new DefaultBatteryService();
-        Services.Location = new DefaultLocationService();
-
         // Default Data
         Data.DefaultFont = Typeface.createFromAsset(ApplicationContext.getAssets(), "fonts/digital-7.ttf");
         Data.Colors = new Colors();
         Data.Preferences = new Preferences();
-        Data.currentLimit = Data.Preferences.highLimitDoubleTap;
+
+        // Services
+        Services.Battery = new DefaultBatteryService();
+        Services.Location = new DefaultLocationService();
+        Services.Limit = new DefaultLimitService();
     }
 }

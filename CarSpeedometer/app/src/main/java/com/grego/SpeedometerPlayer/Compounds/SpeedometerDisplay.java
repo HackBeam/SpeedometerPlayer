@@ -119,9 +119,9 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
             speedValueText.setText(Integer.toString(speedValue));
         }
 
-        if (speedValue >= Core.Data.currentLimit) // Above limit
+        if (speedValue >= Core.Services.Limit.GetCurrentLimit()) // Above limit
         {
-            if (speedValue >= Core.Data.currentLimit + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
+            if (speedValue >= Core.Services.Limit.GetCurrentLimit() + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitWarning);
             }

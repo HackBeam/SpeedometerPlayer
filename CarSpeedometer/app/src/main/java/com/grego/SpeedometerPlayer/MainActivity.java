@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
+import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
 import com.grego.SpeedometerPlayer.Compounds.SpeedometerDisplay;
+import com.grego.SpeedometerPlayer.Services.Implementations.Limit.LimitType;
 
 import java.io.IOException;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public ImageView imgPrev;
     private BatteryDisplay batteryDisplay;
     private SpeedometerDisplay speedometerDisplay;
+    public LimitDisplay limitDisplay;
     private ImageButton settingsButton;
     private TextClock clock;
     //endregion
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         activityRoot = findViewById(R.id.main_activity_root);
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
         speedometerDisplay = (SpeedometerDisplay) findViewById(R.id.limit_speedometer);
+        limitDisplay = (LimitDisplay) findViewById(R.id.limit_display);
         settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
 
@@ -199,32 +203,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e)
     {
-        if (Core.Data.currentLimit == Core.Data.Preferences.highLimitOneTap)
-        {
-            Core.Data.currentLimit = Core.Data.Preferences.lowLimitOneTap;
-        }
-        else
-        {
-            Core.Data.currentLimit = Core.Data.Preferences.highLimitOneTap;
-        }
-
-        //TODO: Trigger an event to update the limit display compounds
+        Core.Services.Limit.ChangeToLimitType(LimitType.ONE_TAP_LIMIT);
         return true;
     }
 
     @Override
     public boolean onDoubleTap(MotionEvent e)
     {
-        if (Core.Data.currentLimit == Core.Data.Preferences.highLimitDoubleTap)
-        {
-            Core.Data.currentLimit = Core.Data.Preferences.lowLimitDoubleTap;
-        }
-        else
-        {
-            Core.Data.currentLimit = Core.Data.Preferences.highLimitDoubleTap;
-        }
 
-        //TODO: Trigger an event to update the limit display compounds
+        Core.Services.Limit.ChangeToLimitType(LimitType.DOUBLE_TAP_LIMIT);
         return true;
     }
 

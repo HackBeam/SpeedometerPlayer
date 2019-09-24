@@ -1,6 +1,5 @@
 package com.grego.SpeedometerPlayer.DataContainers;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
