@@ -13,7 +13,7 @@ import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 import com.grego.SpeedometerPlayer.R;
 
 /**
- * UI component to display the battery level both with text and fillable icon
+ * UI component to display the battery level both with text and fill icon
  */
 public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
 {
@@ -73,24 +73,35 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
         }
     }
 
+    /**
+     * Called when the compound starts displaying.
+     * Subscribes the compound to the BatteryService to listen battery changes.
+     */
     @Override
     protected void onAttachedToWindow()
     {
         super.onAttachedToWindow();
 
-        // Subscribe to listen battery changes
         Core.Services.Battery.Subscribe(this);
     }
 
+    /**
+     * Called when the compound is no longer visible.
+     * Unsubscribe the compound to the BatteryService to stop listen battery changes.
+     */
     @Override
     protected void onDetachedFromWindow()
     {
         super.onDetachedFromWindow();
 
-        // Unsubscribe to listen battery changes
         Core.Services.Battery.Unsubscribe(this);
     }
 
+    /**
+     * Called by the BatteryService when the speed changes.
+     * Saves the given battery level value and updates the compound UI.
+     * @param batteryLevel The new battery level received from the service.
+     */
     @Override
     public void OnBatteryLevelReceived(int batteryLevel)
     {
@@ -126,7 +137,7 @@ public class BatteryDisplay extends ConstraintLayout implements IBatteryListener
 
     /**
      * Updates the icon color and fill rate.
-     * @param colorToApply The color to asign to the icon.
+     * @param colorToApply The color to assign to the icon.
      */
     private void UpdateBatteryIcon(int colorToApply)
     {

@@ -16,6 +16,9 @@ import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Speed info provider service listening to location changes.
+ */
 public class DefaultLocationService implements ILocationService
 {
     private LocationManager locationManagerAndroid;
@@ -31,11 +34,21 @@ public class DefaultLocationService implements ILocationService
         subscribers = new LinkedList<>();
     }
 
+    /**
+     * Checks if Location permission is granted
+     * - If so, the service starts listening Android for location updates
+     * - If not, ask the user to grant permission AND NOTHING MORE.
+     *
+     * NOTE: The given activity must implement the onRequestPermissionsResult() method to call again
+     * this method in order to formally start listening location updates.
+     * @param activity Activity needed to ask and check system permissions.
+     */
     @Override
     public void StartListening(Activity activity)
     {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            !permissionGranted)
         {
             locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0.1f, this);
             permissionGranted = true;
@@ -47,6 +60,9 @@ public class DefaultLocationService implements ILocationService
         }
     }
 
+    /**
+     * Stops listening location updates.
+     */
     @Override
     public void StopListening()
     {
@@ -79,6 +95,13 @@ public class DefaultLocationService implements ILocationService
     }
 
     //region Android Location Manager Events
+    /**
+     * Called by the Android Location Manager when location changes.
+     * Gets the location data, transforms the speed to the configured metric
+     * applying the configured safety margin, and notifies all subscribers
+     * with the new speed info.
+     * @param location The Location data provided by Android.
+     */
     @Override
     public void onLocationChanged(Location location)
     {

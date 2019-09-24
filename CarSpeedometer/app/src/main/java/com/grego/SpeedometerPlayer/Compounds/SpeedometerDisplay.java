@@ -9,6 +9,9 @@ import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
+/**
+ * UI component to display the current speed provided by the Location service.
+ */
 public class SpeedometerDisplay extends ConstraintLayout implements ILocationListener
 {
     private TextView speedValueText;
@@ -57,6 +60,10 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
         }
     }
 
+    /**
+     * Called when the compound starts displaying.
+     * Subscribes the compound to the LocationService to listen location changes.
+     */
     @Override
     protected void onAttachedToWindow()
     {
@@ -65,12 +72,28 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
         Core.Services.Location.Subscribe(this);
     }
 
+    /**
+     * Called when the compound is no longer visible.
+     * Unsubscribe the compound to the LocationService to stop listen location changes.
+     */
     @Override
     protected void onDetachedFromWindow()
     {
         super.onDetachedFromWindow();
 
         Core.Services.Location.Unsubscribe(this);
+    }
+
+    /**
+     * Called by the LocationService when the speed changes.
+     * Saves the given speed value and updates the compound UI.
+     * @param speed The new speed value.
+     */
+    @Override
+    public void OnSpeedChanges(float speed)
+    {
+        speedValue = (int) speed;
+        UpdateUI();
     }
 
     /**
@@ -107,17 +130,13 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
 
     }
 
+    /**
+     * Applies the given color to all of the UI elements of the compound.
+     * @param color
+     */
     public void SetColor(int color)
     {
         Core.Helpers.SetColorToTextView(speedValueText, color);
         Core.Helpers.SetColorToTextView(speedUnitsText, color);
-    }
-
-
-    @Override
-    public void OnSpeedChanges(float speed)
-    {
-        speedValue = (int) speed;
-        UpdateUI();
     }
 }

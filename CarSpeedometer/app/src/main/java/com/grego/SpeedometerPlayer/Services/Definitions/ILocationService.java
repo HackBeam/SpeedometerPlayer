@@ -5,11 +5,14 @@ import android.location.LocationListener;
 
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
+/**
+ * Interface to be implemented by a Location info provider service.
+ */
 public interface ILocationService extends LocationListener
 {
     /**
      * Starts listening android for location changes.
-     * @param activity Activity needed to start listening.
+     * @param activity Activity needed to ask and check system permissions
      */
     void StartListening(Activity activity);
 

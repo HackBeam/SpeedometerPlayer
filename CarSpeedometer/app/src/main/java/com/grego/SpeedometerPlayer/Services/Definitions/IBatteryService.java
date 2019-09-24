@@ -10,15 +10,13 @@ public interface IBatteryService
 {
     /**
      * Starts listening android for battery changes.
-     * @param context Context needed to start the listener.
      */
-    void StartListening(Context context);
+    void StartListening();
 
     /**
      * Stops listening android for battery changes.
-     * @param context Context needed to stop the listener.
      */
-    void StopListening(Context context);
+    void StopListening();
 
     /**
      * Sets the given object to be notified when battery changes.

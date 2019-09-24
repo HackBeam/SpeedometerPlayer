@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     {
         // Core initialization
         Core.Initialize(this);
-        Core.Services.Location.StartListening(this);
 
         // Self initialization
         super.onCreate(savedInstanceState);
@@ -77,14 +76,17 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     protected void onStart()
     {
-        Core.Services.Battery.StartListening(this);
+        Core.Services.Battery.StartListening();
+        Core.Services.Location.StartListening(this);
         super.onStart();
     }
 
     @Override
     protected void onStop()
     {
-        Core.Services.Battery.StopListening(this);
+        Core.Services.Battery.StopListening();
+        Core.Services.Location.StopListening();
+
         super.onStop();
     }
 

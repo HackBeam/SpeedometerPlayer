@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 
@@ -26,6 +27,12 @@ public class DefaultBatteryService extends BroadcastReceiver implements IBattery
         subscribers = new LinkedList<>();
     }
 
+    /**
+     * Called by Android through the Intent.
+     * Notifies all subscribers with the new battery info.
+     * @param context Unused context.
+     * @param intent The Intent provided by Android with the battery info.
+     */
     @Override
     public void onReceive(Context context, Intent intent)
     {
@@ -38,16 +45,22 @@ public class DefaultBatteryService extends BroadcastReceiver implements IBattery
         }
     }
 
+    /**
+     * Registers the service as a receiver for the ACTION_BATTERY_CHANGED intent.
+     */
     @Override
-    public void StartListening(Context context)
+    public void StartListening()
     {
-        context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        Core.ApplicationContext.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
+    /**
+     * Unregisters the service as a receiver for intents.
+     */
     @Override
-    public void StopListening(Context context)
+    public void StopListening()
     {
-        context.unregisterReceiver(this);
+        Core.ApplicationContext.unregisterReceiver(this);
     }
 
     @Override

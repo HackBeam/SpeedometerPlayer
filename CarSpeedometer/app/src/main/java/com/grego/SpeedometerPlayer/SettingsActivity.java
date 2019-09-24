@@ -6,6 +6,9 @@ import android.view.WindowManager;
 
 import com.grego.SpeedometerPlayer.R;
 
+/**
+ * Activity to display and change the Preferences
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
