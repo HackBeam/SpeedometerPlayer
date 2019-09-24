@@ -7,31 +7,33 @@ import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
+import com.grego.SpeedometerPlayer.Services.Listeners.ILimitListener;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
 /**
  * UI compound to display the current speed provided by the Location service.
  */
-public class SpeedometerDisplay extends ConstraintLayout implements ILocationListener
+public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocationListener, ILimitListener
 {
     private TextView speedValueText;
     private TextView speedUnitsText;
 
     private int speedValue = -1;
+    private int cachedLimit = 120;
 
-    public SpeedometerDisplay(Context context)
+    public LimitSpeedometerDisplay(Context context)
     {
         super(context);
         Initialize();
     }
 
-    public SpeedometerDisplay(Context context, AttributeSet attrs)
+    public LimitSpeedometerDisplay(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         Initialize();
     }
 
-    public SpeedometerDisplay(Context context, AttributeSet attrs, int defStyleAttr)
+    public LimitSpeedometerDisplay(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         Initialize();
@@ -119,9 +121,9 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
             speedValueText.setText(Integer.toString(speedValue));
         }
 
-        if (speedValue >= Core.Services.Limit.GetCurrentLimit()) // Above limit
+        if (speedValue >= cachedLimit) // Above limit
         {
-            if (speedValue >= Core.Services.Limit.GetCurrentLimit() + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
+            if (speedValue >= cachedLimit + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitWarning);
             }
@@ -146,5 +148,12 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     {
         Core.Helpers.SetColorToTextView(speedValueText, color);
         Core.Helpers.SetColorToTextView(speedUnitsText, color);
+    }
+
+    @Override
+    public void OnLimitChange(int newLimit)
+    {
+        cachedLimit = newLimit;
+        UpdateUI();
     }
 }
