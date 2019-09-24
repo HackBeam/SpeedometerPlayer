@@ -74,6 +74,7 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
         if (!isInEditMode())
         {
             Core.Services.Location.Subscribe(this);
+            Core.Services.Limit.Subscribe(this);
         }
     }
 
@@ -89,6 +90,7 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
         if (!isInEditMode())
         {
             Core.Services.Location.Unsubscribe(this);
+            Core.Services.Limit.Unsubscribe(this);
         }
     }
 
