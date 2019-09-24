@@ -10,7 +10,7 @@ import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
 /**
- * UI component to display the current speed provided by the Location service.
+ * UI compound to display the current speed provided by the Location service.
  */
 public class SpeedometerDisplay extends ConstraintLayout implements ILocationListener
 {
@@ -69,7 +69,10 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     {
         super.onAttachedToWindow();
 
-        Core.Services.Location.Subscribe(this);
+        if (!isInEditMode())
+        {
+            Core.Services.Location.Subscribe(this);
+        }
     }
 
     /**
@@ -81,12 +84,16 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     {
         super.onDetachedFromWindow();
 
-        Core.Services.Location.Unsubscribe(this);
+        if (!isInEditMode())
+        {
+            Core.Services.Location.Unsubscribe(this);
+        }
     }
 
     /**
      * Called by the LocationService when the speed changes.
      * Saves the given speed value and updates the compound UI.
+     *
      * @param speed The new speed value.
      */
     @Override
@@ -132,6 +139,7 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
 
     /**
      * Applies the given color to all of the UI elements of the compound.
+     *
      * @param color
      */
     public void SetColor(int color)

@@ -10,9 +10,9 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextClock;
-import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
 import com.grego.SpeedometerPlayer.Compounds.SpeedometerDisplay;
@@ -21,16 +21,18 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener
 {
+    //region UI references
     private View activityRoot;
-    public TextView limit_text;
     public ImageView imgPlay;
     public ImageView imgPause;
     public ImageView imgNext;
     public ImageView imgPrev;
     private BatteryDisplay batteryDisplay;
     private SpeedometerDisplay speedometerDisplay;
-
+    private ImageButton settingsButton;
     private TextClock clock;
+    //endregion
+
     private GestureDetectorCompat gd;
 
     private static final int SWIPE_THRESHOLD = 100;
@@ -46,31 +48,40 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Core.Helpers.SetMaxScreenBrightness(this);
+        RetrieveComponentsReferences();
+        InitializeComponents();
+        UpdateUI();
+    }
 
-        // Get UI references
+    /**
+     * Gets all UI components and compounds references from the inflate XML.
+     */
+    private void RetrieveComponentsReferences()
+    {
         activityRoot = findViewById(R.id.main_activity_root);
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
         speedometerDisplay = (SpeedometerDisplay) findViewById(R.id.limit_speedometer);
+        settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
 
-
-        // LEGACY
-        limit_text = (TextView) findViewById(R.id.limite);
+        //TODO: Pack those images in a compound
         imgPlay = (ImageView) findViewById(R.id.imagePlay);
         imgPause = (ImageView) findViewById(R.id.imagePause);
         imgNext = (ImageView) findViewById(R.id.imageNext);
         imgPrev = (ImageView) findViewById(R.id.imagePrev);
+    }
 
-        //Establecer la fuente de la interfaz
-        limit_text.setTypeface(Core.Data.DefaultFont);
+    /**
+     * Sets default configuration for simple components.
+     */
+    private void InitializeComponents()
+    {
+        Core.Helpers.SetMaxScreenBrightness(this);
         clock.setTypeface(Core.Data.DefaultFont);
 
-        //Setear detector de gestos
+        //TODO: Convert this to a service
         gd = new GestureDetectorCompat(this, this);
         gd.setOnDoubleTapListener(this);
-
-        UpdateUI();
     }
 
     @Override
@@ -78,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     {
         Core.Services.Battery.StartListening();
         Core.Services.Location.StartListening(this);
+
         super.onStart();
     }
 
@@ -120,14 +132,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     /**
-     * Updates the displayed limit value.
-     */
-    private void UpdateShowingLimit()
-    {
-        //limit_text.setText(Core.Data.currentLimit); //TODO: Replace with a Limit compound
-    }
-
-    /**
      * Updates all elements in the UI
      */
     public void UpdateUI()
@@ -143,8 +147,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         {
             activityRoot.setScaleX(1f);
         }
-
-        UpdateShowingLimit();//LEGACY
     }
 
     /**
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             Core.Data.currentLimit = Core.Data.Preferences.highLimitOneTap;
         }
 
-        UpdateShowingLimit();
+        //TODO: Trigger an event to update the limit display compounds
         return true;
     }
 
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             Core.Data.currentLimit = Core.Data.Preferences.highLimitDoubleTap;
         }
 
-        UpdateShowingLimit();
+        //TODO: Trigger an event to update the limit display compounds
         return true;
     }
 
@@ -313,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         musicControl(PlayerControles.NEXT);
     }
 
-    public void abrirConfig(View v)
+    public void LaunchSettingsActivity(View v)
     {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
