@@ -9,9 +9,11 @@ import android.widget.TextView;
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
 import com.grego.SpeedometerPlayer.DataContainers.Preferences;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
+import com.grego.SpeedometerPlayer.Services.Definitions.IInputService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILimitService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Input.DefaultInputService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Limit.DefaultLimitService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLocationService;
 
@@ -30,6 +32,7 @@ public class Core
         public static IBatteryService Battery;
         public static ILocationService Location;
         public static ILimitService Limit;
+        public static IInputService Input;
     }
 
     /**
@@ -88,5 +91,6 @@ public class Core
         Services.Battery = new DefaultBatteryService();
         Services.Location = new DefaultLocationService();
         Services.Limit = new DefaultLimitService();
+        Services.Input = new DefaultInputService();
     }
 }

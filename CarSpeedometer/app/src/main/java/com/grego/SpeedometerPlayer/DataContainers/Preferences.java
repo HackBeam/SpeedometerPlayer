@@ -27,6 +27,9 @@ public class Preferences
      * will wait to travel until serve the new location data.
      */
     public final float locationUpdatesMinMeters = 1;
+
+    public final int swipeThreshold = 100;
+    public final int swipeVelocityThreshold = 100;
     //endregion
 
     //region Preferences from XML
