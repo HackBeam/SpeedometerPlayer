@@ -1,4 +1,4 @@
-package com.grego.SpeedometerPlayer.Compounds;
+package com.grego.SpeedometerPlayer.Compounds.Speedometer;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
@@ -7,33 +7,31 @@ import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
-import com.grego.SpeedometerPlayer.Services.Listeners.ILimitListener;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
 /**
  * UI compound to display the current speed provided by the Location service.
  */
-public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocationListener, ILimitListener
+public class SpeedometerDisplay extends ConstraintLayout implements ILocationListener
 {
-    private TextView speedValueText;
-    private TextView speedUnitsText;
+    protected TextView speedValueText;
+    protected TextView speedUnitsText;
 
-    private int speedValue = -1;
-    private int cachedLimit = 120;
+    protected int speedValue = -1;
 
-    public LimitSpeedometerDisplay(Context context)
+    public SpeedometerDisplay(Context context)
     {
         super(context);
         Initialize();
     }
 
-    public LimitSpeedometerDisplay(Context context, AttributeSet attrs)
+    public SpeedometerDisplay(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         Initialize();
     }
 
-    public LimitSpeedometerDisplay(Context context, AttributeSet attrs, int defStyleAttr)
+    public SpeedometerDisplay(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         Initialize();
@@ -74,7 +72,6 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
         if (!isInEditMode())
         {
             Core.Services.Location.Subscribe(this);
-            Core.Services.Limit.Subscribe(this);
         }
     }
 
@@ -90,7 +87,6 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
         if (!isInEditMode())
         {
             Core.Services.Location.Unsubscribe(this);
-            Core.Services.Limit.Unsubscribe(this);
         }
     }
 
@@ -122,23 +118,6 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
         {
             speedValueText.setText(Integer.toString(speedValue));
         }
-
-        if (speedValue >= cachedLimit) // Above limit
-        {
-            if (speedValue >= cachedLimit + Core.Data.Preferences.veryAboveLimitIncrement) // VERY above limit
-            {
-                SetColor(Core.Data.Colors.limitWarning);
-            }
-            else
-            {
-                SetColor(Core.Data.Colors.limitDanger);
-            }
-        }
-        else
-        {
-            SetColor(Core.Data.Colors.normal);
-        }
-
     }
 
     /**
@@ -150,12 +129,5 @@ public class LimitSpeedometerDisplay extends ConstraintLayout implements ILocati
     {
         Core.Helpers.SetColorToTextView(speedValueText, color);
         Core.Helpers.SetColorToTextView(speedUnitsText, color);
-    }
-
-    @Override
-    public void OnLimitChange(int newLimit)
-    {
-        cachedLimit = newLimit;
-        UpdateUI();
     }
 }

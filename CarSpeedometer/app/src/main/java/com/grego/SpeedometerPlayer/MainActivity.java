@@ -16,7 +16,7 @@ import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
 import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
-import com.grego.SpeedometerPlayer.Compounds.LimitSpeedometerDisplay;
+import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Services.Implementations.Limit.LimitType;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public ImageView imgNext;
     public ImageView imgPrev;
     private BatteryDisplay batteryDisplay;
-    private LimitSpeedometerDisplay speedometerDisplay;
+    private LimitSpeedometerDisplay limitSpeedometerDisplay;
     public LimitDisplay limitDisplay;
     private ImageButton settingsButton;
     private TextClock clock;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     {
         activityRoot = findViewById(R.id.main_activity_root);
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
-        speedometerDisplay = (LimitSpeedometerDisplay) findViewById(R.id.limit_speedometer);
+        limitSpeedometerDisplay = (LimitSpeedometerDisplay) findViewById(R.id.limit_speedometer);
         limitDisplay = (LimitDisplay) findViewById(R.id.limit_display);
         settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public void UpdateUI()
     {
         batteryDisplay.UpdateUI();
-        speedometerDisplay.UpdateUI();
+        limitSpeedometerDisplay.UpdateUI();
 
         if (Core.Data.Preferences.mirrorMode)
         {

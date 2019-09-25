@@ -4,20 +4,20 @@ import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILimitService;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILimitListener;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Limit info provider service.
  */
 public class DefaultLimitService implements ILimitService
 {
-    private LinkedList<ILimitListener> subscribers;
+    private ArrayList<ILimitListener> subscribers;
     private int currentLimit;
 
     public DefaultLimitService()
     {
-        subscribers = new LinkedList<>();
+        subscribers = new ArrayList<>();
         currentLimit = Core.Data.Preferences.highLimitOneTap;
     }
 

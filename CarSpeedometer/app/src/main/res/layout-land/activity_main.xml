@@ -10,7 +10,7 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
-    <com.grego.SpeedometerPlayer.Compounds.LimitSpeedometerDisplay
+    <com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay
         android:id="@+id/limit_speedometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

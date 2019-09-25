@@ -9,7 +9,24 @@ import com.grego.SpeedometerPlayer.R;
 public class Preferences
 {
     //region Hardcoded preferences
-    public final int veryAboveLimitIncrement = 10;
+    /**
+     * Offset at which the speed is considered very above limit, so
+     * {@link com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay}
+     * will turns in danger color (red by default)
+     */
+    public final int veryAboveLimitOffset = 10;
+
+    /**
+     * Milliseconds that {@link android.location.LocationManager}
+     * will wait until serve the new location data.
+     */
+    public final int locationUpdatesMinMilliseconds = 1;
+
+    /**
+     * Meters that {@link android.location.LocationManager}
+     * will wait to travel until serve the new location data.
+     */
+    public final float locationUpdatesMinMeters = 1;
     //endregion
 
     //region Preferences from XML

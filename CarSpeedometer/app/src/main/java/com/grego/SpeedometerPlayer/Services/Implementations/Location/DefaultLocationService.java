@@ -13,8 +13,8 @@ import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Speed info provider service listening to location changes.
@@ -22,7 +22,7 @@ import java.util.LinkedList;
 public class DefaultLocationService implements ILocationService
 {
     private LocationManager locationManagerAndroid;
-    private LinkedList<ILocationListener> subscribers;
+    private ArrayList<ILocationListener> subscribers;
     private boolean permissionGranted = false;
 
     private Location cachedLocationData;
@@ -31,7 +31,7 @@ public class DefaultLocationService implements ILocationService
     public DefaultLocationService()
     {
         locationManagerAndroid = (LocationManager) Core.ApplicationContext.getSystemService(Context.LOCATION_SERVICE);
-        subscribers = new LinkedList<>();
+        subscribers = new ArrayList<>();
     }
 
     /**
@@ -50,7 +50,10 @@ public class DefaultLocationService implements ILocationService
             ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
             !permissionGranted)
         {
-            locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0.1f, this);
+            locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                                                          Core.Data.Preferences.locationUpdatesMinMilliseconds,
+                                                          Core.Data.Preferences.locationUpdatesMinMeters,
+                                                          this);
             permissionGranted = true;
         }
         else

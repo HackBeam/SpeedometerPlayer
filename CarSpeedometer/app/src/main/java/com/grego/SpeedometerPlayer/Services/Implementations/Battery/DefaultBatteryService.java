@@ -9,8 +9,8 @@ import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Battery info provider service listening to battery level changes.
@@ -19,12 +19,12 @@ public class DefaultBatteryService extends BroadcastReceiver implements IBattery
 {
     private final static String BATTERY_LEVEL_KEY = "level";
 
-    private LinkedList<IBatteryListener> subscribers;
+    private ArrayList<IBatteryListener> subscribers;
     private int cachedBatteryLevel = -1;
 
     public DefaultBatteryService()
     {
-        subscribers = new LinkedList<>();
+        subscribers = new ArrayList<>();
     }
 
     /**
