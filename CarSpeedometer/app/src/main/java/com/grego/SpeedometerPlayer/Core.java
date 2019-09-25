@@ -1,9 +1,14 @@
 package com.grego.SpeedometerPlayer;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
@@ -42,6 +47,7 @@ public class Core
     {
         /**
          * Applies color and shadow to the given text view.
+         *
          * @param textView The text to colorize.
          * @param color The color to apply.
          */
@@ -53,6 +59,7 @@ public class Core
 
         /**
          * Sets the brightness of the screen to 100%
+         *
          * @param activity The activity calling this method, needed to access to the screen parameters.
          */
         public static void SetMaxScreenBrightness(Activity activity)
@@ -76,6 +83,7 @@ public class Core
     /**
      * Instantiates all the needed services and loads the default data.
      * Should be called by the very first activity onCreate.
+     *
      * @param appContext The context calling this method. Used only to get the ApplicationContext.
      */
     public static void Initialize(Context appContext)

@@ -13,10 +13,11 @@ import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
 import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
+import com.grego.SpeedometerPlayer.Compounds.MusicController;
 import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.LimitController;
-import com.grego.SpeedometerPlayer.PlayerControles;
+import com.grego.SpeedometerPlayer.MusicCommand;
 import com.grego.SpeedometerPlayer.R;
 
 import java.io.IOException;
@@ -25,13 +26,9 @@ public class MainActivity extends AppCompatActivity
 {
     //region UI references
     private View activityRoot;
-    public ImageView imgPlay;
-    public ImageView imgPause;
-    public ImageView imgNext;
-    public ImageView imgPrev;
     private BatteryDisplay batteryDisplay;
     private LimitSpeedometerDisplay limitSpeedometerDisplay;
-    public LimitDisplay limitDisplay;
+    private LimitDisplay limitDisplay;
     private ImageButton settingsButton;
     private TextClock clock;
     //endregion
@@ -64,12 +61,6 @@ public class MainActivity extends AppCompatActivity
         limitDisplay = (LimitDisplay) findViewById(R.id.limit_display);
         settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
-
-        //TODO: Pack those images in a compound
-        imgPlay = (ImageView) findViewById(R.id.imagePlay);
-        imgPause = (ImageView) findViewById(R.id.imagePause);
-        imgNext = (ImageView) findViewById(R.id.imageNext);
-        imgPrev = (ImageView) findViewById(R.id.imagePrev);
     }
 
     /**
@@ -169,90 +160,5 @@ public class MainActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-    }
-
-    /**
-     * Controla la reproduccion del reproductor por defecto
-     *
-     * @param mode Accion a realizar: Atras, Adelante o Play/pausa
-     */
-    public void musicControl(PlayerControles mode)
-    {
-        //AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-        String keyCommand = "input keyevent ";
-
-        if (mode == PlayerControles.NEXT)
-        {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_NEXT;
-            FadeInImage(imgNext);
-        }
-        else if (mode == PlayerControles.PLAYPAUSE)
-        {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
-            FadeInImage(imgPause);
-            FadeInImage(imgPlay);
-        }
-        else if (mode == PlayerControles.PREV)
-        {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-            FadeInImage(imgPrev);
-        }
-
-        try
-        {
-            Runtime.getRuntime().exec(keyCommand);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private void onSwipeRight()
-    {
-        musicControl(PlayerControles.PREV);
-    }
-
-    private void onSwipeLeft()
-    {
-        musicControl(PlayerControles.NEXT);
-    }
-
-
-    public void FadeInImage(ImageView img)
-    {
-        int animationDuration = 1000;
-
-        img.animate().alpha(1f).setDuration(animationDuration).setListener(null);
-
-        //FadeOut con un Delay
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                FadeOutAll();
-            }
-        }, animationDuration);
-    }
-
-    private void FadeOutAll()
-    {
-        int animationDuration = 1000;
-
-        imgPrev.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-
-        imgNext.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-
-        imgPause.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-
-        imgPlay.animate().alpha(0f).setDuration(animationDuration).setListener(null);
     }
 }
