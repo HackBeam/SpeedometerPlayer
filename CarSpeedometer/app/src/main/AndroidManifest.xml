@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".Activities.SettingsActivity"></activity>
     </application>
 
 </manifest>
