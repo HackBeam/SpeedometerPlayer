@@ -59,12 +59,6 @@ public class MusicController extends ConstraintLayout implements IInputListener
             pauseImage = (ImageView) findViewById(R.id.imagePause);
             prevImage = (ImageView) findViewById(R.id.imagePrev);
             nextImage = (ImageView) findViewById(R.id.imageNext);
-
-            // Set default values
-            playImage.setImageAlpha(0);
-            pauseImage.setImageAlpha(0);
-            nextImage.setImageAlpha(0);
-            prevImage.setImageAlpha(0);
         }
     }
 
