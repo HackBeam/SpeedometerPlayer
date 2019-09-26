@@ -1,14 +1,9 @@
 package com.grego.SpeedometerPlayer;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
@@ -81,6 +76,15 @@ public class Core
         public static Typeface DefaultFont;
         public static Colors Colors;
         public static Preferences Preferences;
+    }
+
+    /**
+     * Container class for all request codes used for asking
+     * system permissions to the user.
+     */
+    public static class PermissionRequestCodes
+    {
+        public static final int LocationServiceStart = 1;
     }
 
     /**

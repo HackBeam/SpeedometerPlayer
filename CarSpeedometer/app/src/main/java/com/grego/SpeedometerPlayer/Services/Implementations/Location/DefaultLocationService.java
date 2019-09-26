@@ -58,7 +58,8 @@ public class DefaultLocationService implements ILocationService
         }
         else
         {
-            ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 1);
+            ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
+                                              Core.PermissionRequestCodes.LocationServiceStart);
             // At this point, the activity should call again to the StartListening() method if the requested permission is granted.
         }
     }
