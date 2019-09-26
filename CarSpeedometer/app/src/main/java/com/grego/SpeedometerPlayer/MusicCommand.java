@@ -1,12 +1,11 @@
 package com.grego.SpeedometerPlayer;
 
 /**
- * Created by Grego on 03/08/2017.
+ * List of available music player actions
  */
-
 public enum MusicCommand
 {
-    PLAYPAUSE,
+    PLAY_PAUSE,
     NEXT,
     PREV
 }

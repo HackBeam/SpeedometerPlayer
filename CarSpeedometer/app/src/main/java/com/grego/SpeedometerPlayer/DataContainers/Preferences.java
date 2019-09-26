@@ -30,6 +30,7 @@ public class Preferences
 
     public final int swipeThreshold = 100;
     public final int swipeVelocityThreshold = 100;
+    public final int fadeAnimationMilliseconds = 1000;
     //endregion
 
     //region Preferences from XML

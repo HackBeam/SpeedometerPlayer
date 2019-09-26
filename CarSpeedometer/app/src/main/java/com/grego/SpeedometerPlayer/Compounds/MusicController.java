@@ -1,7 +1,6 @@
 package com.grego.SpeedometerPlayer.Compounds;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -14,6 +13,10 @@ import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 
 import java.io.IOException;
 
+/**
+ * UI compound to control the Music player via touch gestures.
+ * This component handles input and icon feedback animations.
+ */
 public class MusicController extends ConstraintLayout implements IInputListener
 {
     private ImageView playImage;
@@ -56,12 +59,18 @@ public class MusicController extends ConstraintLayout implements IInputListener
             pauseImage = (ImageView) findViewById(R.id.imagePause);
             prevImage = (ImageView) findViewById(R.id.imagePrev);
             nextImage = (ImageView) findViewById(R.id.imageNext);
+
+            // Set default values
+            playImage.setImageAlpha(0);
+            pauseImage.setImageAlpha(0);
+            nextImage.setImageAlpha(0);
+            prevImage.setImageAlpha(0);
         }
     }
 
     /**
      * Called when the compound starts displaying.
-     * Subscribes the compound to the BatteryService to listen battery changes.
+     * Subscribes the compound to the InputService to listen input events.
      */
     @Override
     protected void onAttachedToWindow()
@@ -76,7 +85,7 @@ public class MusicController extends ConstraintLayout implements IInputListener
 
     /**
      * Called when the compound is no longer visible.
-     * Unsubscribe the compound to the BatteryService to stop listen battery changes.
+     * Unsubscribe the compound to the InputService to stop listen input events.
      */
     @Override
     protected void onDetachedFromWindow()
@@ -92,59 +101,74 @@ public class MusicController extends ConstraintLayout implements IInputListener
     @Override
     public void OnSingleTap()
     {
-
+        // Does nothing.
     }
 
     @Override
     public void OnDoubleTap()
     {
-
+        // Does nothing.
     }
 
+    /**
+     * Executes the Play/pause command.
+     */
     @Override
     public void OnLongPress()
     {
-        RunMusicCommand(MusicCommand.PLAYPAUSE);
+        RunMusicCommand(MusicCommand.PLAY_PAUSE);
+        PlayIconAnimation(playImage);
+        PlayIconAnimation(pauseImage);
     }
 
+    /**
+     * Executes the Next song command.
+     */
     @Override
     public void OnSwipeLeft()
     {
         RunMusicCommand(MusicCommand.NEXT);
+        PlayIconAnimation(nextImage);
     }
 
+    /**
+     * Executes the Previous song command.
+     */
     @Override
     public void OnSwipeRight()
     {
         RunMusicCommand(MusicCommand.PREV);
+        PlayIconAnimation(prevImage);
     }
 
-    public void RunMusicCommand(MusicCommand mode)
+    /**
+     * Executes the given music command on the Android system as a Media key press simulation.
+     * @param mode The command to execute.
+     */
+    private void RunMusicCommand(MusicCommand mode)
     {
         //AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         String keyCommand = "input keyevent ";
 
-        if (mode == MusicCommand.NEXT)
+        switch (mode)
         {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_NEXT;
-            FadeInImage(nextImage);
-        }
-        else if (mode == MusicCommand.PLAYPAUSE)
-        {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
-            FadeInImage(playImage);
-            FadeInImage(pauseImage);
-        }
-        else if (mode == MusicCommand.PREV)
-        {
-            //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-            //mAudioManager.dispatchMediaKeyEvent(event);
-            keyCommand += KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-            FadeInImage(prevImage);
+            case PLAY_PAUSE:
+                //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                //mAudioManager.dispatchMediaKeyEvent(event);
+                keyCommand += KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
+                break;
+
+            case NEXT:
+                //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT);
+                //mAudioManager.dispatchMediaKeyEvent(event);
+                keyCommand += KeyEvent.KEYCODE_MEDIA_NEXT;
+                break;
+
+            case PREV:
+                //KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                //mAudioManager.dispatchMediaKeyEvent(event);
+                keyCommand += KeyEvent.KEYCODE_MEDIA_PREVIOUS;
+                break;
         }
 
         try
@@ -157,32 +181,12 @@ public class MusicController extends ConstraintLayout implements IInputListener
         }
     }
 
-
-    public void FadeInImage(ImageView img)
+    /**
+     * Starts the default animation for the given icon image.
+     * @param icon The image to animate.
+     */
+    private void PlayIconAnimation(ImageView icon)
     {
-        int animationDuration = 1000;
-
-        img.animate().alpha(1f).setDuration(animationDuration).setListener(null);
-
-        //FadeOut con un Delay
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                FadeOutAll();
-            }
-        }, animationDuration);
-    }
-
-    private void FadeOutAll()
-    {
-        int animationDuration = 1000;
-
-        playImage.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-        pauseImage.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-        prevImage.animate().alpha(0f).setDuration(animationDuration).setListener(null);
-        nextImage.animate().alpha(0f).setDuration(animationDuration).setListener(null);
+        Core.Services.Animation.FadeViewInOut(icon, Core.Data.Preferences.fadeAnimationMilliseconds);
     }
 }
