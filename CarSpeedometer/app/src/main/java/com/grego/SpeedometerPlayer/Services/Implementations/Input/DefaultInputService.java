@@ -11,6 +11,7 @@ import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Stack;
 
 /**
  * Input events provider.
@@ -18,12 +19,17 @@ import java.util.Iterator;
 public class DefaultInputService implements IInputService, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnTouchListener
 {
     private ArrayList<IInputListener> subscribers;
+    private Stack<IInputListener> incomingSubscribers;
+    private Stack<IInputListener> outcomingSubscribers;
     private GestureDetectorCompat gestureDetector;
     private boolean canNotifySubscribers = false;
+    private boolean iterating = false;
 
     public DefaultInputService()
     {
         subscribers = new ArrayList<>();
+        incomingSubscribers = new Stack<>();
+        outcomingSubscribers = new Stack<>();
         gestureDetector = new GestureDetectorCompat(Core.ApplicationContext, this);
         gestureDetector.setOnDoubleTapListener(this);
     }
@@ -48,13 +54,40 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
     @Override
     public void Subscribe(IInputListener listener)
     {
-        subscribers.add(listener);
+        if (iterating)
+        {
+            incomingSubscribers.push(listener);
+        }
+        else
+        {
+            subscribers.add(listener);
+        }
     }
 
     @Override
     public void Unsubscribe(IInputListener listener)
     {
-        subscribers.remove(listener);
+        if (iterating)
+        {
+            outcomingSubscribers.push(listener);
+        }
+        else
+        {
+            subscribers.remove(listener);
+        }
+    }
+
+    private void ApplyInOutComingSubscribers()
+    {
+        while (!incomingSubscribers.isEmpty())
+        {
+            subscribers.add(incomingSubscribers.pop());
+        }
+
+        while (!outcomingSubscribers.isEmpty())
+        {
+            subscribers.remove(outcomingSubscribers.pop());
+        }
     }
 
     //region OnTouchListener methods
@@ -80,11 +113,15 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
     {
         if (canNotifySubscribers && subscribers.size() > 0)
         {
+            iterating = true;
             Iterator<IInputListener> iterator = subscribers.iterator();
             while (iterator.hasNext())
             {
                 iterator.next().OnSingleTap();
             }
+
+            ApplyInOutComingSubscribers();
+            iterating = false;
 
             return true;
         }
@@ -97,11 +134,16 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
     {
         if (canNotifySubscribers && subscribers.size() > 0)
         {
+            iterating = true;
             Iterator<IInputListener> iterator = subscribers.iterator();
             while (iterator.hasNext())
             {
                 iterator.next().OnDoubleTap();
             }
+
+            ApplyInOutComingSubscribers();
+            iterating = false;
+
             return true;
         }
 
@@ -113,11 +155,15 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
     {
         if (canNotifySubscribers && subscribers.size() > 0)
         {
+            iterating = true;
             Iterator<IInputListener> iterator = subscribers.iterator();
             while (iterator.hasNext())
             {
                 iterator.next().OnLongPress();
             }
+
+            ApplyInOutComingSubscribers();
+            iterating = false;
         }
     }
 
@@ -135,6 +181,7 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
             {
                 if (Math.abs(diffX) > Core.Data.Preferences.swipeThreshold && Math.abs(velocityX) > Core.Data.Preferences.swipeVelocityThreshold)
                 {
+                    iterating = true;
                     if (diffX > 0)
                     {
                         Iterator<IInputListener> iterator = subscribers.iterator();
@@ -152,12 +199,15 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
                         }
                     }
 
+                    ApplyInOutComingSubscribers();
+                    iterating = false;
+
                     result = true;
                 }
             }
-            //TODO: Uncomment this to detect also swipe up and swipe down when needed
-            /*else if (Math.abs(diffY) > Core.Data.Preferences.swipeThreshold && Math.abs(velocityY) > Core.Data.Preferences.swipeVelocityThreshold)
+            else if (Math.abs(diffY) > Core.Data.Preferences.swipeThreshold && Math.abs(velocityY) > Core.Data.Preferences.swipeVelocityThreshold)
             {
+                iterating = true;
                 if (diffY > 0)
                 {
                     Iterator<IInputListener> iterator = subscribers.iterator();
@@ -175,8 +225,11 @@ public class DefaultInputService implements IInputService, GestureDetector.OnGes
                     }
                 }
 
+                ApplyInOutComingSubscribers();
+                iterating = false;
+
                 result = true;
-            }*/
+            }
         }
 
         return result;

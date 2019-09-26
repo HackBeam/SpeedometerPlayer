@@ -6,7 +6,8 @@
     <color name="normal">#33b5e5</color>
     <color name="limit_danger">#ffcc0000</color>
     <color name="limit_warning">#feaa0c</color>
-    <color name="cruise_good">#5ae533</color>
+    <color name="cruise_good">#33b5e5</color>
     <color name="cruise_above">#ffcc0000</color>
-    <color name="cruise_below">#33b5e5</color>
+    <color name="cruise_below">#feaa0c</color>
+    <color name="cruise_desired">#5ae533</color>
 </resources>

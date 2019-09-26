@@ -30,14 +30,13 @@ public interface IInputListener
      */
     void OnSwipeRight();
 
-    //TODO: Uncomment those methods when vertical swipping were needed
     /**
      * Triggered when a swipe from down to up is detected.
      */
-    //void OnSwipeUp();
+    void OnSwipeUp();
 
     /**
      * Triggered when a swipe from up to down is detected.
      */
-    //void OnSwipeDown();
+    void OnSwipeDown();
 }

@@ -92,18 +92,7 @@ public class MusicController extends ConstraintLayout implements IInputListener
         }
     }
 
-    @Override
-    public void OnSingleTap()
-    {
-        // Does nothing.
-    }
-
-    @Override
-    public void OnDoubleTap()
-    {
-        // Does nothing.
-    }
-
+    //region IInputListener events
     /**
      * Executes the Play/pause command.
      */
@@ -134,6 +123,34 @@ public class MusicController extends ConstraintLayout implements IInputListener
         RunMusicCommand(MusicCommand.PREV);
         PlayIconAnimation(prevImage);
     }
+
+    //region Unused Input Events
+    @Override
+    public void OnSingleTap()
+    {
+
+    }
+
+    @Override
+    public void OnDoubleTap()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeUp()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeDown()
+    {
+
+    }
+    //endregion
+
+    //endregion
 
     /**
      * Executes the given music command on the Android system as a Media key press simulation.

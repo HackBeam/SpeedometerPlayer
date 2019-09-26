@@ -123,11 +123,28 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
     /**
      * Applies the given color to all of the UI elements of the compound.
      *
-     * @param color
+     * @param color The color to apply.
      */
     public void SetColor(int color)
     {
         Core.Helpers.SetColorToTextView(speedValueText, color);
         Core.Helpers.SetColorToTextView(speedUnitsText, color);
+    }
+
+    /**
+     * Retrieves the current showing speed.
+     *
+     * @return The current speed.
+     */
+    public int GetSpeedValue()
+    {
+        if (speedValue < 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return speedValue;
+        }
     }
 }

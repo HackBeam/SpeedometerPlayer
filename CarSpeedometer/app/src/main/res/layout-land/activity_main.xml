@@ -10,14 +10,17 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 
-    <com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay
-        android:id="@+id/limit_speedometer"
+    <ImageButton
+        android:id="@+id/settings_button"
+        style="@android:style/Widget.Holo.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="LaunchSettingsActivity"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
 
     <TextClock
         android:id="@+id/textClock"
@@ -62,16 +65,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.35" />
 
-    <ImageButton
-        android:id="@+id/settings_button"
-        style="@android:style/Widget.Holo.ImageButton"
+    <com.grego.SpeedometerPlayer.Compounds.Speedometer.CruiseSpeedometerDisplay
+        android:id="@+id/cruise_display"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay
+        android:id="@+id/limit_speedometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="LaunchSettingsActivity"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
+        android:layout_marginEnd="100dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -10,26 +10,32 @@ import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
 import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
+import com.grego.SpeedometerPlayer.Compounds.MusicController;
+import com.grego.SpeedometerPlayer.Compounds.Speedometer.CruiseSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.LimitController;
 import com.grego.SpeedometerPlayer.R;
+import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 
 /**
  * Initial activity containing all the app Ui elements
  */
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements IInputListener
 {
     //region UI references
     private View activityRoot;
     private BatteryDisplay batteryDisplay;
     private LimitSpeedometerDisplay limitSpeedometerDisplay;
     private LimitDisplay limitDisplay;
+    private CruiseSpeedometerDisplay cruiseDisplay;
     private ImageButton settingsButton;
+    private MusicController musicController;
     private TextClock clock;
     //endregion
 
     private LimitController limitController;
+    private boolean displayingLimiter = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,8 +61,10 @@ public class MainActivity extends AppCompatActivity
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
         limitSpeedometerDisplay = (LimitSpeedometerDisplay) findViewById(R.id.limit_speedometer);
         limitDisplay = (LimitDisplay) findViewById(R.id.limit_display);
+        cruiseDisplay = (CruiseSpeedometerDisplay) findViewById(R.id.cruise_display);
         settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
+        musicController = (MusicController) findViewById(R.id.music_controller);
     }
 
     /**
@@ -67,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         Core.Helpers.SetMaxScreenBrightness(this);
         clock.setTypeface(Core.Data.DefaultFont);
         limitController = new LimitController();
+        Core.Services.Input.Subscribe(this);
     }
 
     /**
@@ -137,6 +146,7 @@ public class MainActivity extends AppCompatActivity
         batteryDisplay.UpdateUI();
         limitSpeedometerDisplay.UpdateUI();
         Core.Services.Limit.ResetLimitIfNeeded();
+        cruiseDisplay.UpdateUI();
 
         if (Core.Data.Preferences.mirrorMode)
         {
@@ -148,9 +158,89 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //region IInputListener events
+
+    @Override
+    public void OnSwipeUp()
+    {
+        SwitchSpeedometerMode();
+    }
+
+    @Override
+    public void OnSwipeDown()
+    {
+        SwitchSpeedometerMode();
+    }
+
+    //region Unused Input Events
+    //region Unused Input Events
+    @Override
+    public void OnSingleTap()
+    {
+
+    }
+
+    @Override
+    public void OnDoubleTap()
+    {
+
+    }
+
+    @Override
+    public void OnLongPress()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeLeft()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeRight()
+    {
+
+    }
+    //endregion
+
+    //endregion
+
+    /**
+     * Shows/hides needed views and activates/deactivates needed components
+     * to switch between Limiter and Cruise modes.
+     */
+    public void SwitchSpeedometerMode()
+    {
+        displayingLimiter = !displayingLimiter;
+
+        if (displayingLimiter)
+        {
+            // Show Limiter
+            limitController.StartController();
+            limitDisplay.setAlpha(1);
+            limitSpeedometerDisplay.setAlpha(1);
+
+            // Hide Cruise
+            cruiseDisplay.SetActive(false);
+        }
+        else
+        {
+            // Show Cruise
+            cruiseDisplay.SetActive(true);
+
+            // Hide Limiter
+            limitController.StopController();
+            limitDisplay.setAlpha(0);
+            limitSpeedometerDisplay.setAlpha(0);
+        }
+    }
+
     /**
      * Called by the settings button.
      * Opens the settings activity.
+     *
      * @param view Unused parameter.
      */
     public void LaunchSettingsActivity(View view)

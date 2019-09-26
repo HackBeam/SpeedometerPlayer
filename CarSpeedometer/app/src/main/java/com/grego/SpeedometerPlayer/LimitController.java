@@ -56,6 +56,18 @@ public class LimitController implements IInputListener
     {
 
     }
+
+    @Override
+    public void OnSwipeUp()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeDown()
+    {
+
+    }
     //endregion
 
     //endregion
