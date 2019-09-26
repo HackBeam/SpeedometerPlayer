@@ -3,25 +3,21 @@ package com.grego.SpeedometerPlayer.Activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
 import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
-import com.grego.SpeedometerPlayer.Compounds.MusicController;
 import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.LimitController;
-import com.grego.SpeedometerPlayer.MusicCommand;
 import com.grego.SpeedometerPlayer.R;
 
-import java.io.IOException;
-
+/**
+ * Initial activity containing all the app Ui elements
+ */
 public class MainActivity extends AppCompatActivity
 {
     //region UI references
@@ -140,6 +136,7 @@ public class MainActivity extends AppCompatActivity
     {
         batteryDisplay.UpdateUI();
         limitSpeedometerDisplay.UpdateUI();
+        Core.Services.Limit.ResetLimitIfNeeded();
 
         if (Core.Data.Preferences.mirrorMode)
         {

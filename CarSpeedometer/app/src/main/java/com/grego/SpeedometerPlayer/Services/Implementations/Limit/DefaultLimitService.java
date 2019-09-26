@@ -81,6 +81,18 @@ public class DefaultLimitService implements ILimitService
         }
     }
 
+    @Override
+    public void ResetLimitIfNeeded()
+    {
+        if (currentLimit != Core.Data.Preferences.highLimitOneTap &&
+            currentLimit != Core.Data.Preferences.lowLimitOneTap &&
+            currentLimit != Core.Data.Preferences.highLimitDoubleTap &&
+            currentLimit != Core.Data.Preferences.lowLimitDoubleTap)
+        {
+            ChangeLimitValue(Core.Data.Preferences.highLimitOneTap);
+        }
+    }
+
     /**
      * Notify all subscribers the limit has changed.
      */

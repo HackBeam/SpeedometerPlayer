@@ -37,4 +37,10 @@ public interface ILimitService
      * @param newLimitValue The new limit value.
      */
     void ChangeLimitValue(int newLimitValue);
+
+    /**
+     * Checks if the current limit is a valid value.
+     * If not, will reset the limit to a valid value.
+     */
+    void ResetLimitIfNeeded();
 }
