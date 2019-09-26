@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
 import com.grego.SpeedometerPlayer.DataContainers.Preferences;
+import com.grego.SpeedometerPlayer.Services.Definitions.IAnimationService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IInputService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILimitService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Animation.DefaultAnimationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Input.DefaultInputService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Limit.DefaultLimitService;
@@ -38,6 +40,7 @@ public class Core
         public static ILocationService Location;
         public static ILimitService Limit;
         public static IInputService Input;
+        public static IAnimationService Animation;
     }
 
     /**
@@ -100,5 +103,6 @@ public class Core
         Services.Location = new DefaultLocationService();
         Services.Limit = new DefaultLimitService();
         Services.Input = new DefaultInputService();
+        Services.Animation = new DefaultAnimationService();
     }
 }
