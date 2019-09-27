@@ -2,26 +2,27 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.grego.SpeedometerPlayer.Compounds.Speedometer.SpeedometerDisplay
+        android:id="@+id/limit_speedometer_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/limit_value"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:shadowColor="@android:color/holo_red_dark"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="120"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_red_dark"
         android:textSize="56sp"
+        android:layout_marginBottom="38dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"  />
 
 </android.support.constraint.ConstraintLayout>

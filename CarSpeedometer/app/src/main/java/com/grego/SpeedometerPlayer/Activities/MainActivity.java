@@ -9,12 +9,10 @@ import android.widget.ImageButton;
 import android.widget.TextClock;
 
 import com.grego.SpeedometerPlayer.Compounds.BatteryDisplay;
-import com.grego.SpeedometerPlayer.Compounds.LimitDisplay;
 import com.grego.SpeedometerPlayer.Compounds.MusicController;
 import com.grego.SpeedometerPlayer.Compounds.Speedometer.CruiseSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay;
 import com.grego.SpeedometerPlayer.Core;
-import com.grego.SpeedometerPlayer.LimitController;
 import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 
@@ -26,15 +24,13 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     //region UI references
     private View activityRoot;
     private BatteryDisplay batteryDisplay;
-    private LimitSpeedometerDisplay limitSpeedometerDisplay;
-    private LimitDisplay limitDisplay;
+    private LimitSpeedometerDisplay limitDisplay;
     private CruiseSpeedometerDisplay cruiseDisplay;
     private ImageButton settingsButton;
     private MusicController musicController;
     private TextClock clock;
     //endregion
 
-    private LimitController limitController;
     private boolean displayingLimiter = true;
 
     @Override
@@ -59,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     {
         activityRoot = findViewById(R.id.main_activity_root);
         batteryDisplay = (BatteryDisplay) findViewById(R.id.battery_display);
-        limitSpeedometerDisplay = (LimitSpeedometerDisplay) findViewById(R.id.limit_speedometer);
-        limitDisplay = (LimitDisplay) findViewById(R.id.limit_display);
+        limitDisplay = (LimitSpeedometerDisplay) findViewById(R.id.limit_display);
         cruiseDisplay = (CruiseSpeedometerDisplay) findViewById(R.id.cruise_display);
         settingsButton = (ImageButton) findViewById(R.id.settings_button);
         clock = (TextClock) findViewById(R.id.textClock);
@@ -74,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     {
         Core.Helpers.SetMaxScreenBrightness(this);
         clock.setTypeface(Core.Data.DefaultFont);
-        limitController = new LimitController();
         Core.Services.Input.Subscribe(this);
     }
 
@@ -87,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements IInputListener
         Core.Services.Battery.StartListening();
         Core.Services.Location.StartListening(this);
         Core.Services.Input.StartListening(activityRoot);
-        limitController.StartController();
 
         super.onStart();
     }
@@ -101,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements IInputListener
         Core.Services.Battery.StopListening();
         Core.Services.Location.StopListening();
         Core.Services.Input.StopListening();
-        limitController.StopController();
 
         super.onStop();
     }
@@ -144,8 +136,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     public void UpdateUI()
     {
         batteryDisplay.UpdateUI();
-        limitSpeedometerDisplay.UpdateUI();
-        Core.Services.Limit.ResetLimitIfNeeded();
+        limitDisplay.UpdateUI();
         cruiseDisplay.UpdateUI();
 
         if (Core.Data.Preferences.mirrorMode)
@@ -172,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements IInputListener
         SwitchSpeedometerMode();
     }
 
-    //region Unused Input Events
     //region Unused Input Events
     @Override
     public void OnSingleTap()
@@ -215,26 +205,8 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     {
         displayingLimiter = !displayingLimiter;
 
-        if (displayingLimiter)
-        {
-            // Show Limiter
-            limitController.StartController();
-            limitDisplay.setAlpha(1);
-            limitSpeedometerDisplay.setAlpha(1);
-
-            // Hide Cruise
-            cruiseDisplay.SetActive(false);
-        }
-        else
-        {
-            // Show Cruise
-            cruiseDisplay.SetActive(true);
-
-            // Hide Limiter
-            limitController.StopController();
-            limitDisplay.setAlpha(0);
-            limitSpeedometerDisplay.setAlpha(0);
-        }
+        limitDisplay.SetActive(displayingLimiter);
+        cruiseDisplay.SetActive(!displayingLimiter);
     }
 
     /**

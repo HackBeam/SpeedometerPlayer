@@ -62,6 +62,7 @@ public class CruiseSpeedometerDisplay extends ConstraintLayout implements IInput
      */
     public void UpdateUI()
     {
+        speedometer.UpdateUI();
         desiredSpeedText.setText(Integer.toString(desiredSpeed));
 
         if (speedometer.GetSpeedValue() >= desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
@@ -156,6 +157,5 @@ public class CruiseSpeedometerDisplay extends ConstraintLayout implements IInput
     public void SetColor(int color)
     {
         speedometer.SetColor(color);
-
     }
 }
