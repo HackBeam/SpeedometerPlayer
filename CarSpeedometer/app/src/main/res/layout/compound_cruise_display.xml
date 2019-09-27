@@ -67,8 +67,11 @@
 
         <ImageView
             android:id="@+id/cruise_arrow_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="100dp"
+            android:rotation="0"
+            android:transformPivotX="20dp"
+            android:transformPivotY="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

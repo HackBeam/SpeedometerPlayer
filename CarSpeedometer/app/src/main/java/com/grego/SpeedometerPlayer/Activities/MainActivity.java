@@ -135,10 +135,6 @@ public class MainActivity extends AppCompatActivity implements IInputListener
      */
     public void UpdateUI()
     {
-        batteryDisplay.UpdateUI();
-        limitDisplay.UpdateUI();
-        cruiseDisplay.UpdateUI();
-
         if (Core.Data.Preferences.mirrorMode)
         {
             activityRoot.setScaleX(-1f);

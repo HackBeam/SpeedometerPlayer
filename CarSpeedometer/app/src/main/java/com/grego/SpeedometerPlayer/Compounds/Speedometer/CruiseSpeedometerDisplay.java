@@ -16,7 +16,7 @@ import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 public class CruiseSpeedometerDisplay extends ConstraintLayout implements IInputListener
 {
     private static final int DESIRED_SPEED_OFFSET = 5;
-    private static final int BACKGROUND_DEACTIVATED_ALPHA = 128;
+    private static final int BACKGROUND_DEACTIVATED_ALPHA = 90;
 
     private SpeedometerDisplay speedometer;
     private TextView desiredSpeedText;
