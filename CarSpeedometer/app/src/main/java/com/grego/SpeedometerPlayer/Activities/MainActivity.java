@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
         setContentView(R.layout.activity_main);
 
         RetrieveComponentsReferences();
+        InitializeServices();
         InitializeComponents();
         UpdateUI();
     }
@@ -73,29 +74,26 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     }
 
     /**
-     * Start services and components behaviour.
+     * Start services behaviour.
      */
-    @Override
-    protected void onStart()
+    protected void InitializeServices()
     {
         Core.Services.Battery.StartListening();
         Core.Services.Location.StartListening(this);
         Core.Services.Input.StartListening(activityRoot);
-
-        super.onStart();
     }
 
     /**
-     * Stop services and components behaviour.
+     * Stop services behaviour.
      */
     @Override
-    protected void onStop()
+    protected void onDestroy()
     {
         Core.Services.Battery.StopListening();
         Core.Services.Location.StopListening();
         Core.Services.Input.StopListening();
 
-        super.onStop();
+        super.onDestroy();
     }
 
     /**
@@ -135,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements IInputListener
      */
     public void UpdateUI()
     {
+        limitDisplay.UpdateUI();
+        cruiseDisplay.UpdateUI();
+        batteryDisplay.UpdateUI();
+
         if (Core.Data.Preferences.mirrorMode)
         {
             activityRoot.setScaleX(-1f);

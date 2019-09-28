@@ -7,87 +7,80 @@ import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
+import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
 /**
  * UI compound to display the current speed provided by the Location service.
  */
-public class SpeedometerDisplay extends ConstraintLayout implements ILocationListener
+public abstract class SpeedometerDisplay extends ConstraintLayout implements ILocationListener, IInputListener
 {
     protected TextView speedValueText;
     protected TextView speedUnitsText;
 
     protected int speedValue = -1;
+    protected boolean active = false;
 
     public SpeedometerDisplay(Context context)
     {
         super(context);
-        Initialize();
+
+        InflateXML();
+
+        if (!isInEditMode())
+        {
+            Initialize();
+        }
     }
 
     public SpeedometerDisplay(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        Initialize();
+
+        InflateXML();
+
+        if (!isInEditMode())
+        {
+            Initialize();
+        }
     }
 
     public SpeedometerDisplay(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
-        Initialize();
-    }
 
-    /**
-     * Initializes the component.
-     * - Inflates it's XML.
-     * - Gets the UI objects.
-     * - Establish all the default values.
-     */
-    private void Initialize()
-    {
-        inflate(getContext(), R.layout.compound_speedometer, this);
+        InflateXML();
 
         if (!isInEditMode())
         {
-            // Get UI object references
-            speedValueText = (TextView) findViewById(R.id.speed_value);
-            speedUnitsText = (TextView) findViewById(R.id.speed_units);
-
-            // Set default preferences
-            speedValueText.setTypeface(Core.Data.DefaultFont);
-            speedUnitsText.setTypeface(Core.Data.DefaultFont);
-            SetColor(Core.Data.Colors.normal);
+            Initialize();
         }
     }
 
     /**
-     * Called when the compound starts displaying.
-     * Subscribes the compound to the LocationService to listen location changes.
+     * Calls to the inflate() method.
      */
-    @Override
-    protected void onAttachedToWindow()
-    {
-        super.onAttachedToWindow();
-
-        if (!isInEditMode())
-        {
-            Core.Services.Location.Subscribe(this);
-        }
-    }
+    protected abstract void InflateXML();
 
     /**
-     * Called when the compound is no longer visible.
-     * Unsubscribe the compound to the LocationService to stop listen location changes.
+     * Gets all the UI objects and sets all the default values.
      */
-    @Override
-    protected void onDetachedFromWindow()
-    {
-        super.onDetachedFromWindow();
+    protected abstract void Initialize();
 
-        if (!isInEditMode())
-        {
-            Core.Services.Location.Unsubscribe(this);
-        }
+    /**
+     * Gets the UI objects for the speed view and sets all it's default values.
+     * @param speedValueTextID The ID of the speed value TextView.
+     * @param speedUnitsTextID The ID of the speed units value TextView.
+     */
+    protected void InitializeSpeedometer(int speedValueTextID, int speedUnitsTextID)
+    {
+        // Get UI object references
+        speedValueText = (TextView) findViewById(speedValueTextID);
+        speedUnitsText = (TextView) findViewById(speedUnitsTextID);
+
+        // Set default preferences
+        speedValueText.setTypeface(Core.Data.DefaultFont);
+        speedUnitsText.setTypeface(Core.Data.DefaultFont);
     }
 
     /**
@@ -131,6 +124,42 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
         Core.Helpers.SetColorToTextView(speedUnitsText, color);
     }
 
+
+    /**
+     * Enables or disables the compound.
+     *
+     * @param active Whether or not the compound should be visible and active.
+     */
+    public void SetActive(boolean active)
+    {
+        if (active && !this.active)
+        {
+            this.active = true;
+            Core.Services.Location.Subscribe(this);
+            Core.Services.Input.Subscribe(this);
+            this.setAlpha(1);
+            OnActivate();
+        }
+        else if (!active && this.active)
+        {
+            this.active = false;
+            Core.Services.Location.Unsubscribe(this);
+            Core.Services.Input.Unsubscribe(this);
+            this.setAlpha(0);
+            OnDeactivate();
+        }
+    }
+
+    /**
+     * Called when the component is being activate.
+     */
+    protected abstract void OnActivate();
+
+    /**
+     * Called when the component is being deactivate.
+     */
+    protected abstract void OnDeactivate();
+
     /**
      * Retrieves the current showing speed.
      *
@@ -147,4 +176,49 @@ public class SpeedometerDisplay extends ConstraintLayout implements ILocationLis
             return speedValue;
         }
     }
+
+    //region IInputListener events
+    @Override
+    public void OnSingleTap()
+    {
+
+    }
+
+    @Override
+    public void OnDoubleTap()
+    {
+
+    }
+
+    @Override
+    public void OnLongPress()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeLeft()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeRight()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeUp()
+    {
+
+    }
+
+    @Override
+    public void OnSwipeDown()
+    {
+
+    }
+
+    //endregion
 }
