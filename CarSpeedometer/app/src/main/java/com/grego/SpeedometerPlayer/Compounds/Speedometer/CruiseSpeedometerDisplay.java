@@ -115,6 +115,16 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     {
         float normalized = (GetSpeedValue() - minSpeedIndicator) / INDICATOR_SPEED_RANGE;
         float rotation = normalized * ROTATION_RANGE - ROTATION_OFFSET;
+
+        if (rotation < -90)
+        {
+            rotation = -90;
+        }
+        else if (rotation > 90)
+        {
+            rotation = 90;
+        }
+
         arrowIndicator.setRotation(rotation);
     }
 
@@ -122,7 +132,19 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     @Override
     public void OnSingleTap()
     {
-        SetDesiredSpeed();
+        SetDesiredSpeed(GetSpeedValue());
+    }
+
+    @Override
+    public void OnSwipeUp()
+    {
+        SetDesiredSpeed(desiredSpeed + 1);
+    }
+
+    @Override
+    public void OnSwipeDown()
+    {
+        SetDesiredSpeed(desiredSpeed - 1);
     }
     //endregion
 
@@ -130,10 +152,18 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
      * Sets the desired speed to the current speed
      * and updates the rotation algorithm cache vars.
      */
-    private void SetDesiredSpeed()
+    private void SetDesiredSpeed(int desiredSpeed)
     {
-        desiredSpeed = GetSpeedValue();
-        minSpeedIndicator = desiredSpeed - DESIRED_SPEED_OFFSET - DESIRED_SPEED_OFFSET - DESIRED_SPEED_OFFSET;
+        if (desiredSpeed < 0)
+        {
+            this.desiredSpeed = 0;
+        }
+        else
+        {
+            this.desiredSpeed = desiredSpeed;
+        }
+
+        minSpeedIndicator = this.desiredSpeed - DESIRED_SPEED_OFFSET - DESIRED_SPEED_OFFSET - DESIRED_SPEED_OFFSET;
         UpdateUI();
     }
 
@@ -142,7 +172,7 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     {
         if (desiredSpeed == 0)
         {
-            SetDesiredSpeed();
+            SetDesiredSpeed(GetSpeedValue());
         }
     }
 

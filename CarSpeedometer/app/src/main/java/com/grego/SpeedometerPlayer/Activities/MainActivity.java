@@ -15,6 +15,7 @@ import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
+import com.grego.SpeedometerPlayer.SpeedometerMode;
 
 /**
  * Initial activity containing all the app Ui elements
@@ -152,13 +153,13 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     @Override
     public void OnSwipeUp()
     {
-        SwitchSpeedometerMode();
+        SwitchSpeedometerMode(SpeedometerMode.CRUISE);
     }
 
     @Override
     public void OnSwipeDown()
     {
-        SwitchSpeedometerMode();
+        SwitchSpeedometerMode(SpeedometerMode.CRUISE);
     }
 
     //region Unused Input Events
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     @Override
     public void OnDoubleTap()
     {
-
+        SwitchSpeedometerMode(SpeedometerMode.LIMIT);
     }
 
     @Override
@@ -199,12 +200,10 @@ public class MainActivity extends AppCompatActivity implements IInputListener
      * Shows/hides needed views and activates/deactivates needed components
      * to switch between Limiter and Cruise modes.
      */
-    public void SwitchSpeedometerMode()
+    public void SwitchSpeedometerMode(SpeedometerMode mode)
     {
-        displayingLimiter = !displayingLimiter;
-
-        limitDisplay.SetActive(displayingLimiter);
-        cruiseDisplay.SetActive(!displayingLimiter);
+        limitDisplay.SetActive(mode == SpeedometerMode.LIMIT);
+        cruiseDisplay.SetActive(mode == SpeedometerMode.CRUISE);
     }
 
     /**
