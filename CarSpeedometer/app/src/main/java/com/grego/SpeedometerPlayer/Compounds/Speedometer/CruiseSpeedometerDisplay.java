@@ -31,7 +31,7 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     private int minSpeedIndicator;
     private float currentArrowDegrees = 0;
     private static final float INDICATOR_SPEED_RANGE = DESIRED_SPEED_OFFSET * 6;
-    private static final int ROTATION_OFFSET = 90;
+    private static final int ROTATION_OFFSET = 110;
     private static final int ROTATION_RANGE = ROTATION_OFFSET * 2;
     //endregion
 
@@ -86,14 +86,14 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
         super.UpdateUI();
         desiredSpeedText.setText(Integer.toString(desiredSpeed));
 
-        if (this.speedValue >= desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
+        if (this.speedValue > desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
         {
             SetColor(Core.Data.Colors.cruiseAbove);
             backgroundAbove.setImageAlpha(255);
             backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
         }
-        else if (this.speedValue <= desiredSpeed - DESIRED_SPEED_OFFSET) // Below good speed
+        else if (this.speedValue < desiredSpeed - DESIRED_SPEED_OFFSET) // Below good speed
         {
             SetColor(Core.Data.Colors.cruiseBelow);
             backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
@@ -116,13 +116,13 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
         float normalized = (GetSpeedValue() - minSpeedIndicator) / INDICATOR_SPEED_RANGE;
         float rotation = normalized * ROTATION_RANGE - ROTATION_OFFSET;
 
-        if (rotation < -90)
+        if (rotation < -ROTATION_OFFSET)
         {
-            rotation = -90;
+            rotation = -ROTATION_OFFSET;
         }
-        else if (rotation > 90)
+        else if (rotation > ROTATION_OFFSET)
         {
-            rotation = 90;
+            rotation = ROTATION_OFFSET;
         }
 
         arrowIndicator.setRotation(rotation);
