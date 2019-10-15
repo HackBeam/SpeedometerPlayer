@@ -158,6 +158,8 @@ public class MusicController extends ConstraintLayout implements IInputListener
      */
     private void RunMusicCommand(MusicCommand mode)
     {
+        Core.Services.Vibration.Vibrate();
+
         //AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         String keyCommand = "input keyevent ";
 

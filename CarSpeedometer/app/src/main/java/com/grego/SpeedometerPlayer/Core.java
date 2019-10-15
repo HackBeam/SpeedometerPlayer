@@ -3,6 +3,7 @@ package com.grego.SpeedometerPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Vibrator;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -12,10 +13,12 @@ import com.grego.SpeedometerPlayer.Services.Definitions.IAnimationService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IInputService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
+import com.grego.SpeedometerPlayer.Services.Definitions.IVibrationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Animation.DefaultAnimationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Input.DefaultInputService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLocationService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Vibration.DefaultVibrationService;
 
 /**
  * Container class for Services, Helpers and Global Data
@@ -33,6 +36,7 @@ public class Core
         public static ILocationService Location;
         public static IInputService Input;
         public static IAnimationService Animation;
+        public static IVibrationService Vibration;
     }
 
     /**
@@ -104,5 +108,6 @@ public class Core
         Services.Location = new DefaultLocationService();
         Services.Input = new DefaultInputService();
         Services.Animation = new DefaultAnimationService();
+        Services.Vibration = new DefaultVibrationService();
     }
 }

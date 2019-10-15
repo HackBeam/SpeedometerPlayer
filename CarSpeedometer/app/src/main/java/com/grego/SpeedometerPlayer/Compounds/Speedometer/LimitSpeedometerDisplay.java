@@ -1,6 +1,7 @@
 package com.grego.SpeedometerPlayer.Compounds.Speedometer;
 
 import android.content.Context;
+import android.os.IInterface;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
 {
     private TextView limitText;
     private int currentLimit;
+    private int forcedLimit = -1;
 
     public LimitSpeedometerDisplay(Context context)
     {
@@ -61,9 +63,9 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
         super.UpdateUI();
         UpdateDisplayingLimit();
 
-        if (this.speedValue >= currentLimit) // Above limit
+        if (this.speedValue > currentLimit) // Above limit
         {
-            if (this.speedValue >= currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
+            if (this.speedValue > currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitDanger);
             }
@@ -90,10 +92,22 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
 
     }
 
+    /**
+     * Forces to set the given limit.
+     *
+     * @param limitValue The new limit.
+     */
+    public void ForceLimit(int limitValue)
+    {
+        forcedLimit = limitValue;
+    }
+
     //region IInputListener events
     @Override
     public void OnSingleTap()
     {
+        forcedLimit = -1;
+
         if (currentLimit == Core.Data.Preferences.highLimitOneTap)
         {
             currentLimit = Core.Data.Preferences.lowLimitOneTap;
@@ -109,6 +123,8 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
     @Override
     public void OnDoubleTap()
     {
+        forcedLimit = -1;
+
         if (currentLimit == Core.Data.Preferences.highLimitDoubleTap)
         {
             currentLimit = Core.Data.Preferences.lowLimitDoubleTap;
@@ -130,9 +146,16 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
      */
     private void UpdateDisplayingLimit()
     {
-        if (currentLimit != Core.Data.Preferences.highLimitOneTap && currentLimit != Core.Data.Preferences.lowLimitOneTap && currentLimit != Core.Data.Preferences.highLimitDoubleTap && currentLimit != Core.Data.Preferences.lowLimitDoubleTap)
+        if (forcedLimit < 0)
         {
-            currentLimit = Core.Data.Preferences.highLimitOneTap;
+            if (currentLimit != Core.Data.Preferences.highLimitOneTap && currentLimit != Core.Data.Preferences.lowLimitOneTap && currentLimit != Core.Data.Preferences.highLimitDoubleTap && currentLimit != Core.Data.Preferences.lowLimitDoubleTap)
+            {
+                currentLimit = Core.Data.Preferences.highLimitOneTap;
+            }
+        }
+        else
+        {
+            currentLimit = forcedLimit;
         }
 
         limitText.setText(Integer.toString(currentLimit));

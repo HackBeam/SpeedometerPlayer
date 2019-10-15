@@ -4,6 +4,9 @@
     <string name="mirror_mode_preference_name">Modo Espejo</string>
     <string name="mirror_mode_preference_description">Invierte la pantalla para reflejarla en el cristal</string>
 
+    <string name="vibration_preference_name">Vibración</string>
+    <string name="vibration_preference_description">Vibrar al usar controles de reproducción</string>
+
     <string name="safety_margin_preference_name">Margen de seguridad</string>
 
     <string-array name="safety_margin_preference_descriptions">

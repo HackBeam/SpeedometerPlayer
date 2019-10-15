@@ -20,13 +20,13 @@ public class Preferences
      * Milliseconds that {@link android.location.LocationManager}
      * will wait until serve the new location data.
      */
-    public final int locationUpdatesMinMilliseconds = 1;
+    public final int locationUpdatesMinMilliseconds = 0;
 
     /**
      * Meters that {@link android.location.LocationManager}
      * will wait to travel until serve the new location data.
      */
-    public final float locationUpdatesMinMeters = 1;
+    public final float locationUpdatesMinMeters = 0;
 
     public final int swipeThreshold = 100;
     public final int swipeVelocityThreshold = 100;
@@ -35,6 +35,7 @@ public class Preferences
 
     //region Preferences from XML
     public boolean mirrorMode;
+    public boolean vibrateEnabled;
     public float safetyMargin;
     public String speedUnit;
     public int highLimitOneTap;
@@ -55,6 +56,7 @@ public class Preferences
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(Core.ApplicationContext);
         mirrorMode = preferences.getBoolean("mirror_mode", false);
+        vibrateEnabled = preferences.getBoolean("vibration_enabled", true);
         safetyMargin = Integer.parseInt(preferences.getString("safety_margin", "0"));
         speedUnit = preferences.getString("speed_unit", "km/h");
         highLimitOneTap = Integer.parseInt(preferences.getString("high_limit_one_tap", "120"));

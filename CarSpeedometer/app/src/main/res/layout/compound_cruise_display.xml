@@ -82,7 +82,6 @@
             android:layout_width="40dp"
             android:layout_height="100dp"
             android:layout_marginBottom="20dp"
-            android:rotation="110"
             android:transformPivotX="20dp"
             android:transformPivotY="80dp"
             app:layout_constraintBottom_toBottomOf="parent"

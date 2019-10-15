@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
     private TextClock clock;
     //endregion
 
-    private boolean displayingLimiter = true;
+    private SpeedometerMode currentMode = SpeedometerMode.LIMIT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -202,8 +202,16 @@ public class MainActivity extends AppCompatActivity implements IInputListener
      */
     public void SwitchSpeedometerMode(SpeedometerMode mode)
     {
+        if (currentMode != SpeedometerMode.LIMIT && mode == SpeedometerMode.LIMIT)
+        {
+            // If returning from another mode by double tapping, set always the same limit
+            limitDisplay.ForceLimit(Core.Data.Preferences.highLimitDoubleTap);
+        }
+
         limitDisplay.SetActive(mode == SpeedometerMode.LIMIT);
         cruiseDisplay.SetActive(mode == SpeedometerMode.CRUISE);
+
+        currentMode = mode;
     }
 
     /**

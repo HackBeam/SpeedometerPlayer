@@ -16,6 +16,7 @@ import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 public class CruiseSpeedometerDisplay extends SpeedometerDisplay
 {
     private static final int DESIRED_SPEED_OFFSET = 5;
+    private static final int DANGER_SPEED_OFFSET = DESIRED_SPEED_OFFSET * 3;
     private static final int BACKGROUND_DEACTIVATED_ALPHA = 90;
 
     private TextView desiredSpeedText;
@@ -88,7 +89,15 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
 
         if (this.speedValue > desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
         {
-            SetColor(Core.Data.Colors.cruiseAbove);
+            if (this.speedValue > desiredSpeed + DANGER_SPEED_OFFSET) // VERY Above good speed
+            {
+                SetColor(Core.Data.Colors.cruiseVeryAbove);
+            }
+            else
+            {
+                SetColor(Core.Data.Colors.cruiseAbove);
+            }
+
             backgroundAbove.setImageAlpha(255);
             backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);

@@ -17,6 +17,7 @@ public class Colors
     public int limitWarning;
     public int cruiseGood;
     public int cruiseAbove;
+    public int cruiseVeryAbove;
     public int cruiseBelow;
     public int cruiseDesired;
 
@@ -27,6 +28,7 @@ public class Colors
         limitWarning = ContextCompat.getColor(Core.ApplicationContext, R.color.limit_warning);
         cruiseGood = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_good);
         cruiseAbove = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_above);
+        cruiseVeryAbove = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_very_above);
         cruiseBelow = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_below);
         cruiseDesired =  ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_desired);
     }
