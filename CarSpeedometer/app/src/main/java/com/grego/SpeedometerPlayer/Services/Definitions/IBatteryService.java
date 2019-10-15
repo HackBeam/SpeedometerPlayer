@@ -1,6 +1,5 @@
 package com.grego.SpeedometerPlayer.Services.Definitions;
 
-import android.content.Context;
 import com.grego.SpeedometerPlayer.Services.Listeners.IBatteryListener;
 
 /**

@@ -3,7 +3,6 @@ package com.grego.SpeedometerPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Vibrator;
 import android.view.WindowManager;
 import android.widget.TextView;
 

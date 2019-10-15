@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
-import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 

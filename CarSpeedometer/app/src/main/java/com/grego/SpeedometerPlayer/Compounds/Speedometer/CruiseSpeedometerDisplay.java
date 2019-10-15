@@ -1,14 +1,12 @@
 package com.grego.SpeedometerPlayer.Compounds.Speedometer;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
-import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 
 /**
  * UI compound to display the current speed colored according to the cruise desired speed.
