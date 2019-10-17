@@ -1,10 +1,14 @@
 package com.grego.SpeedometerPlayer.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextClock;
 
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements IInputListener
 
     private SpeedometerMode currentMode = SpeedometerMode.LIMIT;
 
+    /**
+     * Used to check it's state when the warning popup is dismissed.
+     */
+    private CheckBox warningCheckbox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -47,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements IInputListener
         RetrieveComponentsReferences();
         InitializeServices();
         InitializeComponents();
+        ShowWarningPopup();
         UpdateUI();
     }
 
@@ -126,6 +136,39 @@ public class MainActivity extends AppCompatActivity implements IInputListener
                 }
             }
             // other 'case' lines to check for other permissions this app might request
+        }
+    }
+
+    /**
+     * Shows a popup warning the users of GPS usage
+     * and asking them to be careful while driving.
+     */
+    private void ShowWarningPopup()
+    {
+        if (Core.Data.Preferences.showOpeningWarning)
+        {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.PopupTheme);
+            LayoutInflater layoutInflater = LayoutInflater.from(Core.ApplicationContext);
+            View warningContent = layoutInflater.inflate(R.layout.warning_popup, null);
+
+            warningCheckbox = (CheckBox) warningContent.findViewById(R.id.warning_checkbox);
+            dialogBuilder.setView(warningContent);
+            dialogBuilder.setTitle(R.string.warning_popup_title);
+
+            dialogBuilder.setNeutralButton(R.string.accept_button, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    if (warningCheckbox.isChecked())
+                    {
+                        Core.Data.Preferences.showOpeningWarning = false;
+                        Core.Data.Preferences.SavePreferences();
+                    }
+                }
+            });
+
+            dialogBuilder.show();
         }
     }
 

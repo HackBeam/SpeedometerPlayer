@@ -1,5 +1,6 @@
 package com.grego.SpeedometerPlayer.DataContainers;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -67,6 +68,11 @@ public class Preferences
     public int lowLimitOneTap;
     public int highLimitDoubleTap;
     public int lowLimitDoubleTap;
+
+    //region Hided preferences form XML
+    public boolean showOpeningWarning = true;
+    //endregion
+
     //endregion
 
     public Preferences()
@@ -89,13 +95,14 @@ public class Preferences
         lowLimitOneTap = Integer.parseInt(preferences.getString("low_limit_one_tap", "100"));
         highLimitDoubleTap = Integer.parseInt(preferences.getString("high_limit_double_tap", "80"));
         lowLimitDoubleTap = Integer.parseInt(preferences.getString("low_limit_double_tap", "60"));
+        showOpeningWarning = preferences.getBoolean("show_opening_warning", true);
     }
 
-    /* TODO: Implement SavePreferences if needed
-    public void SavePreferences(Context context)
+    public void SavePreferences()
     {
-        SharedPreferences.Editor preferences = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        preferences.
+        SharedPreferences.Editor preferences = PreferenceManager.getDefaultSharedPreferences(Core.ApplicationContext).edit();
+        preferences.putBoolean("show_opening_warning", showOpeningWarning);
+        // TODO: Save all preferences
+        preferences.apply();
     }
-    */
 }

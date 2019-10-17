@@ -70,4 +70,17 @@
         <item>200</item>
     </string-array>
 
+    <string name="warning_popup_title">ATENCIÓN\n</string>
+    <string name="warning_popup_message">
+        La velocidad mostrada por esta aplicación esta calculada en base a la localizacion GPS del dispositivo y puede que estos valores no sean reales.
+
+        \n\nNo pierda de vista la carretera y conduzca con precaución.
+
+        \n\nCompruebe siempre los valores de velocidad reales mirando al cuentakilometros de su vehículo.
+
+        \n\nNo use las funciones de la aplicación si no es seguro.
+    </string>
+    <string name="dont_show_again_checkbox">No volver a mostrar este mensaje</string>
+    <string name="accept_button">Aceptar</string>
+
 </resources>

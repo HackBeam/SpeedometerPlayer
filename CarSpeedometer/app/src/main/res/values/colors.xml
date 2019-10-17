@@ -3,6 +3,7 @@
     <color name="colorPrimary">#000</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#33b5e5</color>
+    <color name="popupBackground">#444444</color>
     <color name="normal">#33b5e5</color>
     <color name="limit_danger">#ffcc0000</color>
     <color name="limit_warning">#feaa0c</color>
