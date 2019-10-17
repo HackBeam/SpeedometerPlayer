@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.DataContainers.Colors;
 import com.grego.SpeedometerPlayer.DataContainers.Preferences;
+import com.grego.SpeedometerPlayer.DataContainers.SoundIdClipPairs;
 import com.grego.SpeedometerPlayer.Services.Definitions.IAnimationService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IInputService;
@@ -79,6 +80,7 @@ public class Core
         public static Typeface DefaultFont;
         public static Colors Colors;
         public static Preferences Preferences;
+        public static SoundIdClipPairs Sounds;
     }
 
     /**
@@ -104,6 +106,7 @@ public class Core
         Data.DefaultFont = Typeface.createFromAsset(ApplicationContext.getAssets(), "fonts/digital-7.ttf");
         Data.Colors = new Colors();
         Data.Preferences = new Preferences();
+        Data.Sounds = new SoundIdClipPairs();
 
         // Services
         Services.Battery = new DefaultBatteryService();

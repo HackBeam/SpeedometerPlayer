@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
+import com.grego.SpeedometerPlayer.GlobalEnums.SoundID;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 import com.grego.SpeedometerPlayer.Services.Listeners.ILocationListener;
 
@@ -19,6 +20,7 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
 
     protected int speedValue = -1;
     protected boolean active = false;
+    protected SoundID lastSoundPlayed = SoundID.NONE;
 
     public SpeedometerDisplay(Context context)
     {
@@ -80,6 +82,20 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
         // Set default preferences
         speedValueText.setTypeface(Core.Data.DefaultFont);
         speedUnitsText.setTypeface(Core.Data.DefaultFont);
+    }
+
+    /**
+     * Plays the given sound ID if its not the last played sound.
+     * To allow to play any sound again, call this method with SoundID.NONE as parameter.
+     * @param soundID The sound ID to play.
+     */
+    protected void PlaySound(SoundID soundID)
+    {
+        if (lastSoundPlayed != soundID)
+        {
+            lastSoundPlayed = soundID;
+            Core.Services.Sound.PlaySound(soundID);
+        }
     }
 
     /**

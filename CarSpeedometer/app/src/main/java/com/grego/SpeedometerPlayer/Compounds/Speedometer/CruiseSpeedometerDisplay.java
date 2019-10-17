@@ -25,7 +25,6 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     private ImageView arrowIndicator;
 
     private int desiredSpeed = 0;
-    private boolean active = false;
 
     //region Rotation algorithm cache
     private int minSpeedIndicator;
@@ -91,12 +90,12 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
             if (this.speedValue > desiredSpeed + DANGER_SPEED_OFFSET) // VERY Above good speed
             {
                 SetColor(Core.Data.Colors.cruiseVeryAbove);
-                Core.Services.Sound.PlaySound(SoundID.CRUISE_DANGER);
+                this.PlaySound(SoundID.CRUISE_DANGER);
             }
             else
             {
                 SetColor(Core.Data.Colors.cruiseAbove);
-                Core.Services.Sound.PlaySound(SoundID.CRUISE_ABOVE);
+                this.PlaySound(SoundID.CRUISE_ABOVE);
             }
 
             backgroundAbove.setImageAlpha(255);
@@ -106,7 +105,7 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
         else if (this.speedValue < desiredSpeed - DESIRED_SPEED_OFFSET) // Below good speed
         {
             SetColor(Core.Data.Colors.cruiseBelow);
-            Core.Services.Sound.PlaySound(SoundID.CRUISE_BELOW);
+            this.PlaySound(SoundID.CRUISE_BELOW);
             backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundBelow.setImageAlpha(255);
@@ -114,6 +113,7 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
         else // In good desired speed
         {
             SetColor(Core.Data.Colors.cruiseGood);
+            this.PlaySound(SoundID.NONE);
             backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundGood.setImageAlpha(255);
             backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);

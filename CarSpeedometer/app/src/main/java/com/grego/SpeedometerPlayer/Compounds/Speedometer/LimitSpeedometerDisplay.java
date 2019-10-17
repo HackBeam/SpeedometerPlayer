@@ -66,17 +66,18 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
             if (this.speedValue > currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitDanger);
-                Core.Services.Sound.PlaySound(SoundID.LIMIT_DANGER);
+                this.PlaySound(SoundID.LIMIT_DANGER);
             }
             else
             {
                 SetColor(Core.Data.Colors.limitWarning);
-                Core.Services.Sound.PlaySound(SoundID.LIMIT_REACHED);
+                this.PlaySound(SoundID.LIMIT_REACHED);
             }
         }
         else
         {
             SetColor(Core.Data.Colors.normal);
+            this.PlaySound(SoundID.NONE);
         }
     }
 

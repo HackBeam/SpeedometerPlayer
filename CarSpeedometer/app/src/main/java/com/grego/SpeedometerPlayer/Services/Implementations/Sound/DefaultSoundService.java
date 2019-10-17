@@ -5,7 +5,6 @@ import android.net.Uri;
 
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.GlobalEnums.SoundID;
-import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Definitions.ISoundService;
 
 import java.io.IOException;
@@ -20,8 +19,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class DefaultSoundService implements ISoundService, MediaPlayer.OnPreparedListener
 {
-    private static final HashMap<SoundID, Integer> configuration = LoadConfiguration();
-
     private HashMap<SoundID, MediaPlayer> players;
 
     //region Pre-loading state variables
@@ -52,11 +49,11 @@ public class DefaultSoundService implements ISoundService, MediaPlayer.OnPrepare
     private void PreloadSounds()
     {
         preloadLock = new ReentrantLock();
-        toPreloadCount = configuration.size();
+        toPreloadCount = Core.Data.Sounds.pairs.size();
         preloadedCount = 0;
         soundsPreloaded = false;
 
-        for (Map.Entry<SoundID, Integer> entry : configuration.entrySet())
+        for (Map.Entry<SoundID, Integer> entry : Core.Data.Sounds.pairs.entrySet())
         {
             MediaPlayer player = new MediaPlayer();
             Uri soundUri = Uri.parse(Core.Data.Preferences.resourcesUri + entry.getValue());
@@ -75,23 +72,6 @@ public class DefaultSoundService implements ISoundService, MediaPlayer.OnPrepare
 
             players.put(entry.getKey(), player);
         }
-    }
-
-    /**
-     * Called to initialize the configuration map.
-     * @return The configuration map initialized.
-     */
-    private static HashMap<SoundID, Integer> LoadConfiguration()
-    {
-        HashMap<SoundID, Integer> map = new HashMap<>();
-
-        map.put(SoundID.LIMIT_REACHED, R.raw.test);
-        map.put(SoundID.LIMIT_DANGER, R.raw.test);
-        map.put(SoundID.CRUISE_BELOW, R.raw.test);
-        map.put(SoundID.CRUISE_ABOVE, R.raw.test);
-        map.put(SoundID.CRUISE_DANGER, R.raw.test);
-
-        return map;
     }
 
     //region MediaPlayer.OnPreparedListener

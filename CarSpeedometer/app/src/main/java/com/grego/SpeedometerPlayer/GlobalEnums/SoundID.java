@@ -2,6 +2,7 @@ package com.grego.SpeedometerPlayer.GlobalEnums;
 
 public enum SoundID
 {
+    NONE,
     LIMIT_REACHED,
     LIMIT_DANGER,
     CRUISE_BELOW,
