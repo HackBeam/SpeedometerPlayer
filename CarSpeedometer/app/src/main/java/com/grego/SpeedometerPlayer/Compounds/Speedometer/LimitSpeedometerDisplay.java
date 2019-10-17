@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
+import com.grego.SpeedometerPlayer.GlobalEnums.SoundID;
 import com.grego.SpeedometerPlayer.R;
 
 /**
@@ -65,10 +66,12 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
             if (this.speedValue > currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
             {
                 SetColor(Core.Data.Colors.limitDanger);
+                Core.Services.Sound.PlaySound(SoundID.LIMIT_DANGER);
             }
             else
             {
                 SetColor(Core.Data.Colors.limitWarning);
+                Core.Services.Sound.PlaySound(SoundID.LIMIT_REACHED);
             }
         }
         else

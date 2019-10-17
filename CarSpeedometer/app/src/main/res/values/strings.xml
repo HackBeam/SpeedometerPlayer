@@ -7,6 +7,9 @@
     <string name="vibration_preference_name">Vibración</string>
     <string name="vibration_preference_description">Vibrar al usar controles de reproducción</string>
 
+    <string name="sound_preference_name">Alertas sonoras</string>
+    <string name="sound_preference_description">Sonar cuando la velocidad sobrepase los limites</string>
+
     <string name="safety_margin_preference_name">Margen de seguridad</string>
 
     <string-array name="safety_margin_preference_descriptions">

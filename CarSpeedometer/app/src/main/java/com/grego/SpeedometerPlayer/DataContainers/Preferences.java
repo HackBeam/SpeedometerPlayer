@@ -28,14 +28,39 @@ public class Preferences
      */
     public final float locationUpdatesMinMeters = 0;
 
+    /**
+     * Minimum distance the finger must travel to detect it as a swipe instead of a drag.
+     */
     public final int swipeThreshold = 100;
+
+    /**
+     * Minimum speed the finger must travel at to detect it as a swipe instead of a drag.
+     */
     public final int swipeVelocityThreshold = 100;
+
+    /**
+     * Time for the music player icons fade animation.
+     * This is only for the FadeIn (or Out) time.
+     * The complete FadeInOut animation is this value x2.
+     */
     public final int fadeAnimationMilliseconds = 1000;
+
+    /**
+     * Time for the vibration duration.
+     */
+    public final int vibrationMilliseconds = 200;
+
+    /**
+     * Android URI used to fetch any local resource as a stream.
+     * Useful for asynchronous load of images and sounds.
+     */
+    public final String resourcesUri = "android.resource://com.grego.carspeedometer/";
     //endregion
 
     //region Preferences from XML
     public boolean mirrorMode;
     public boolean vibrateEnabled;
+    public boolean soundEnabled;
     public float safetyMargin;
     public String speedUnit;
     public int highLimitOneTap;
@@ -57,6 +82,7 @@ public class Preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(Core.ApplicationContext);
         mirrorMode = preferences.getBoolean("mirror_mode", false);
         vibrateEnabled = preferences.getBoolean("vibration_enabled", true);
+        soundEnabled = preferences.getBoolean("sound_enabled", true);
         safetyMargin = Integer.parseInt(preferences.getString("safety_margin", "0"));
         speedUnit = preferences.getString("speed_unit", "km/h");
         highLimitOneTap = Integer.parseInt(preferences.getString("high_limit_one_tap", "120"));

@@ -15,7 +15,7 @@ import com.grego.SpeedometerPlayer.Compounds.Speedometer.LimitSpeedometerDisplay
 import com.grego.SpeedometerPlayer.Core;
 import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
-import com.grego.SpeedometerPlayer.SpeedometerMode;
+import com.grego.SpeedometerPlayer.GlobalEnums.SpeedometerMode;
 
 /**
  * Initial activity containing all the app Ui elements

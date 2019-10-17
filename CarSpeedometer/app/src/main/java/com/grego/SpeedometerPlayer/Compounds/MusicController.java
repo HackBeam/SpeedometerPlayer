@@ -7,7 +7,7 @@ import android.view.KeyEvent;
 import android.widget.ImageView;
 
 import com.grego.SpeedometerPlayer.Core;
-import com.grego.SpeedometerPlayer.MusicCommand;
+import com.grego.SpeedometerPlayer.GlobalEnums.MusicCommand;
 import com.grego.SpeedometerPlayer.R;
 import com.grego.SpeedometerPlayer.Services.Listeners.IInputListener;
 

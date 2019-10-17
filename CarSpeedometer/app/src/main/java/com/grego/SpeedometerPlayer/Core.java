@@ -12,11 +12,13 @@ import com.grego.SpeedometerPlayer.Services.Definitions.IAnimationService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IBatteryService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IInputService;
 import com.grego.SpeedometerPlayer.Services.Definitions.ILocationService;
+import com.grego.SpeedometerPlayer.Services.Definitions.ISoundService;
 import com.grego.SpeedometerPlayer.Services.Definitions.IVibrationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Animation.DefaultAnimationService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Battery.DefaultBatteryService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Input.DefaultInputService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Location.DefaultLocationService;
+import com.grego.SpeedometerPlayer.Services.Implementations.Sound.DefaultSoundService;
 import com.grego.SpeedometerPlayer.Services.Implementations.Vibration.DefaultVibrationService;
 
 /**
@@ -36,6 +38,7 @@ public class Core
         public static IInputService Input;
         public static IAnimationService Animation;
         public static IVibrationService Vibration;
+        public static ISoundService Sound;
     }
 
     /**
@@ -108,5 +111,6 @@ public class Core
         Services.Input = new DefaultInputService();
         Services.Animation = new DefaultAnimationService();
         Services.Vibration = new DefaultVibrationService();
+        Services.Sound = new DefaultSoundService();
     }
 }

@@ -23,7 +23,7 @@ public class DefaultVibrationService implements IVibrationService
     {
         if (Core.Data.Preferences.vibrateEnabled)
         {
-            androidVibrator.vibrate(100);
+            androidVibrator.vibrate(Core.Data.Preferences.vibrationMilliseconds);
         }
     }
 }

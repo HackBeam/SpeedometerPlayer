@@ -1,4 +1,4 @@
-package com.grego.SpeedometerPlayer;
+package com.grego.SpeedometerPlayer.GlobalEnums;
 
 public enum SpeedometerMode
 {

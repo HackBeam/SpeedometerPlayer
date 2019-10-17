@@ -11,6 +11,11 @@
         android:key="vibration_enabled"
         android:summary="@string/vibration_preference_description"
         android:title="@string/vibration_preference_name" />
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="sound_enabled"
+        android:summary="@string/sound_preference_description"
+        android:title="@string/sound_preference_name" />
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/safety_margin_preference_descriptions"
