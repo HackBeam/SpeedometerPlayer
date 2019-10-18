@@ -27,6 +27,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/cruise_speed_value"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageView
+        android:id="@+id/cruise_signal_lost_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/cruise_speed_units"
+        app:layout_constraintEnd_toEndOf="@+id/cruise_speed_units"
+        app:layout_constraintStart_toStartOf="@+id/cruise_speed_units"
+        app:srcCompat="@drawable/ic_signal_lost" />
+
     <TextView
         android:id="@+id/cruise_desired_value"
         android:layout_width="wrap_content"

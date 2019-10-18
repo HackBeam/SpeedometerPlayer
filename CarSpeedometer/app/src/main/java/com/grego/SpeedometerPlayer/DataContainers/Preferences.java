@@ -56,6 +56,8 @@ public class Preferences
      * Useful for asynchronous load of images and sounds.
      */
     public final String resourcesUri = "android.resource://com.grego.carspeedometer/";
+
+    public final int locationSignalCheckingMilliseconds = 10000;
     //endregion
 
     //region Preferences from XML

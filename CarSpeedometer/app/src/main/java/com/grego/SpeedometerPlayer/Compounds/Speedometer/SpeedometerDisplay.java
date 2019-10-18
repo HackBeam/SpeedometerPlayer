@@ -3,6 +3,7 @@ package com.grego.SpeedometerPlayer.Compounds.Speedometer;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.grego.SpeedometerPlayer.Core;
@@ -17,6 +18,7 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
 {
     protected TextView speedValueText;
     protected TextView speedUnitsText;
+    protected ImageView signalLostIcon;
 
     protected int speedValue = -1;
     protected boolean active = false;
@@ -73,15 +75,18 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
      * @param speedValueTextID The ID of the speed value TextView.
      * @param speedUnitsTextID The ID of the speed units value TextView.
      */
-    protected void InitializeSpeedometer(int speedValueTextID, int speedUnitsTextID)
+    protected void InitializeSpeedometer(int speedValueTextID, int speedUnitsTextID, int signalLostIconID)
     {
         // Get UI object references
         speedValueText = (TextView) findViewById(speedValueTextID);
         speedUnitsText = (TextView) findViewById(speedUnitsTextID);
+        signalLostIcon = (ImageView) findViewById(signalLostIconID);
 
         // Set default preferences
         speedValueText.setTypeface(Core.Data.DefaultFont);
         speedUnitsText.setTypeface(Core.Data.DefaultFont);
+        signalLostIcon.setColorFilter(Core.Data.Colors.signalLost);
+        signalLostIcon.setAlpha(0f);
     }
 
     /**
@@ -99,19 +104,6 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
     }
 
     /**
-     * Called by the LocationService when the speed changes.
-     * Saves the given speed value and updates the compound UI.
-     *
-     * @param speed The new speed value.
-     */
-    @Override
-    public void OnSpeedChanges(float speed)
-    {
-        speedValue = (int) speed;
-        UpdateUI();
-    }
-
-    /**
      * Updates the displaying UI of the component with the stored values.
      */
     public void UpdateUI()
@@ -125,6 +117,7 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
         else
         {
             speedValueText.setText(Integer.toString(speedValue));
+            signalLostIcon.setAlpha(0f);
         }
     }
 
@@ -191,6 +184,33 @@ public abstract class SpeedometerDisplay extends ConstraintLayout implements ILo
             return speedValue;
         }
     }
+
+    //region ILocationListener events
+
+    /**
+     * Called by the LocationService when the speed changes.
+     * Saves the given speed value and updates the compound UI.
+     *
+     * @param speed The new speed value.
+     */
+    @Override
+    public void OnSpeedChanges(float speed)
+    {
+        speedValue = (int) speed;
+        UpdateUI();
+    }
+
+    @Override
+    public void OnSignalLost()
+    {
+        speedValue = -1; // Values below 0 means no signal
+        UpdateUI();
+
+        signalLostIcon.setAlpha(1f);
+        SetColor(Core.Data.Colors.signalLost);
+        Core.Services.Sound.PlaySound(SoundID.SIGNAL_LOST);
+    }
+    //endregion
 
     //region IInputListener events
     @Override

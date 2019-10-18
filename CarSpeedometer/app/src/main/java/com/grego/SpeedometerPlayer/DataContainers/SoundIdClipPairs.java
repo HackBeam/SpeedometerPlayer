@@ -22,6 +22,7 @@ public class SoundIdClipPairs
         map.put(SoundID.CRUISE_BELOW, R.raw.user_should_accelerate);
         map.put(SoundID.CRUISE_ABOVE, R.raw.user_should_accelerate);
         map.put(SoundID.CRUISE_DANGER, R.raw.danger_speed_reached);
+        map.put(SoundID.SIGNAL_LOST, R.raw.signal_lost);
 
         return map;
     }

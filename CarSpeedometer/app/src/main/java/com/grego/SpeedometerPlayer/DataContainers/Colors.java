@@ -20,6 +20,7 @@ public class Colors
     public int cruiseVeryAbove;
     public int cruiseBelow;
     public int cruiseDesired;
+    public int signalLost;
 
     public Colors()
     {
@@ -31,5 +32,6 @@ public class Colors
         cruiseVeryAbove = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_very_above);
         cruiseBelow = ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_below);
         cruiseDesired =  ContextCompat.getColor(Core.ApplicationContext, R.color.cruise_desired);
+        signalLost =  ContextCompat.getColor(Core.ApplicationContext, R.color.signal_lost);
     }
 }

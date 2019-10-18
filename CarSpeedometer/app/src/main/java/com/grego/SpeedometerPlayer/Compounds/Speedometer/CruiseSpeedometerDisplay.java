@@ -61,7 +61,7 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
     protected void Initialize()
     {
         // Get UI object references
-        InitializeSpeedometer(R.id.cruise_speed_value, R.id.cruise_speed_units);
+        InitializeSpeedometer(R.id.cruise_speed_value, R.id.cruise_speed_units, R.id.cruise_signal_lost_icon);
         desiredSpeedText = (TextView) findViewById(R.id.cruise_desired_value);
         backgroundAbove = (ImageView) findViewById(R.id.cruise_above_background);
         backgroundGood = (ImageView) findViewById(R.id.cruise_desired_background);
@@ -85,41 +85,51 @@ public class CruiseSpeedometerDisplay extends SpeedometerDisplay
         super.UpdateUI();
         desiredSpeedText.setText(Integer.toString(desiredSpeed));
 
-        if (this.speedValue > desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
+        if (this.speedValue > 0)
         {
-            if (this.speedValue > desiredSpeed + DANGER_SPEED_OFFSET) // VERY Above good speed
+            if (this.speedValue > desiredSpeed + DESIRED_SPEED_OFFSET) // Above good speed
             {
-                SetColor(Core.Data.Colors.cruiseVeryAbove);
-                this.PlaySound(SoundID.CRUISE_DANGER);
+                if (this.speedValue > desiredSpeed + DANGER_SPEED_OFFSET) // VERY Above good speed
+                {
+                    SetColor(Core.Data.Colors.cruiseVeryAbove);
+                    this.PlaySound(SoundID.CRUISE_DANGER);
+                }
+                else
+                {
+                    SetColor(Core.Data.Colors.cruiseAbove);
+                    this.PlaySound(SoundID.CRUISE_ABOVE);
+                }
+
+                backgroundAbove.setImageAlpha(255);
+                backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
+                backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             }
-            else
+            else if (this.speedValue < desiredSpeed - DESIRED_SPEED_OFFSET) // Below good speed
             {
-                SetColor(Core.Data.Colors.cruiseAbove);
-                this.PlaySound(SoundID.CRUISE_ABOVE);
+                SetColor(Core.Data.Colors.cruiseBelow);
+                this.PlaySound(SoundID.CRUISE_BELOW);
+                backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
+                backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
+                backgroundBelow.setImageAlpha(255);
+            }
+            else // In good desired speed
+            {
+                SetColor(Core.Data.Colors.cruiseGood);
+                this.PlaySound(SoundID.NONE);
+                backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
+                backgroundGood.setImageAlpha(255);
+                backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             }
 
-            backgroundAbove.setImageAlpha(255);
+            UpdateArrow();
+        }
+        else
+        {
+            backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
             backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
         }
-        else if (this.speedValue < desiredSpeed - DESIRED_SPEED_OFFSET) // Below good speed
-        {
-            SetColor(Core.Data.Colors.cruiseBelow);
-            this.PlaySound(SoundID.CRUISE_BELOW);
-            backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
-            backgroundGood.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
-            backgroundBelow.setImageAlpha(255);
-        }
-        else // In good desired speed
-        {
-            SetColor(Core.Data.Colors.cruiseGood);
-            this.PlaySound(SoundID.NONE);
-            backgroundAbove.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
-            backgroundGood.setImageAlpha(255);
-            backgroundBelow.setImageAlpha(BACKGROUND_DEACTIVATED_ALPHA);
-        }
 
-        UpdateArrow();
     }
 
     private void UpdateArrow()

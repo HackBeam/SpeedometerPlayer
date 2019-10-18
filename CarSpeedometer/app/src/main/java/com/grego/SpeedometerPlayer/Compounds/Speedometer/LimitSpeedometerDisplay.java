@@ -42,7 +42,7 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
     protected void Initialize()
     {
         // Get UI object references
-        InitializeSpeedometer(R.id.limit_speed_value, R.id.limit_speed_units);
+        InitializeSpeedometer(R.id.limit_speed_value, R.id.limit_speed_units, R.id.limit_signal_lost_icon);
         limitText = (TextView) findViewById(R.id.limit_value);
 
         // Set default preferences
@@ -61,23 +61,26 @@ public class LimitSpeedometerDisplay extends SpeedometerDisplay
         super.UpdateUI();
         UpdateDisplayingLimit();
 
-        if (this.speedValue > currentLimit) // Above limit
+        if (this.speedValue > 0)
         {
-            if (this.speedValue > currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
+            if (this.speedValue > currentLimit) // Above limit
             {
-                SetColor(Core.Data.Colors.limitDanger);
-                this.PlaySound(SoundID.LIMIT_DANGER);
+                if (this.speedValue > currentLimit + Core.Data.Preferences.veryAboveLimitOffset) // VERY above limit
+                {
+                    SetColor(Core.Data.Colors.limitDanger);
+                    this.PlaySound(SoundID.LIMIT_DANGER);
+                }
+                else
+                {
+                    SetColor(Core.Data.Colors.limitWarning);
+                    this.PlaySound(SoundID.LIMIT_REACHED);
+                }
             }
             else
             {
-                SetColor(Core.Data.Colors.limitWarning);
-                this.PlaySound(SoundID.LIMIT_REACHED);
+                SetColor(Core.Data.Colors.normal);
+                this.PlaySound(SoundID.NONE);
             }
-        }
-        else
-        {
-            SetColor(Core.Data.Colors.normal);
-            this.PlaySound(SoundID.NONE);
         }
     }
 

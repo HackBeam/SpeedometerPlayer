@@ -26,11 +26,14 @@ public class DefaultLocationService implements ILocationService
     private boolean permissionGranted = false;
 
     private Location cachedLocationData;
+    private LocationSignalChecker signalChecker;
     private int cachedSpeedValue = -1;
+    private boolean signalLost = false;
 
     public DefaultLocationService()
     {
         locationManagerAndroid = (LocationManager) Core.ApplicationContext.getSystemService(Context.LOCATION_SERVICE);
+        signalChecker = new LocationSignalChecker(this);
         subscribers = new ArrayList<>();
     }
 
@@ -38,30 +41,29 @@ public class DefaultLocationService implements ILocationService
      * Checks if Location permission is granted
      * - If so, the service starts listening Android for location updates
      * - If not, ask the user to grant permission AND NOTHING MORE.
-     *
+     * <p>
      * NOTE: The given activity must implement the onRequestPermissionsResult() method to call again
      * this method in order to formally start listening location updates.
+     *
      * @param activity Activity needed to ask and check system permissions.
      */
     @Override
     public void StartListening(Activity activity)
     {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            !permissionGranted)
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && !permissionGranted)
         {
-            locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                                                          Core.Data.Preferences.locationUpdatesMinMilliseconds,
-                                                          Core.Data.Preferences.locationUpdatesMinMeters,
-                                                          this);
+            locationManagerAndroid.requestLocationUpdates(LocationManager.GPS_PROVIDER, Core.Data.Preferences.locationUpdatesMinMilliseconds, Core.Data.Preferences.locationUpdatesMinMeters, this);
             permissionGranted = true;
+
+
+            signalChecker.StartChecking();
         }
         else
         {
-            ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
-                                              Core.PermissionRequestCodes.LocationServiceStart);
+            ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, Core.PermissionRequestCodes.LocationServiceStart);
             // At this point, the activity should call again to the StartListening() method if the requested permission is granted.
         }
+
     }
 
     /**
@@ -73,6 +75,7 @@ public class DefaultLocationService implements ILocationService
         if (permissionGranted)
         {
             locationManagerAndroid.removeUpdates(this);
+            signalChecker.StopChecking();
             permissionGranted = false;
         }
     }
@@ -82,7 +85,11 @@ public class DefaultLocationService implements ILocationService
     {
         subscribers.add(listener);
 
-        if (permissionGranted && cachedLocationData != null)
+        if (signalLost)
+        {
+            listener.OnSignalLost();
+        }
+        else if (permissionGranted && cachedLocationData != null)
         {
             listener.OnSpeedChanges(cachedSpeedValue);
         }
@@ -99,11 +106,13 @@ public class DefaultLocationService implements ILocationService
     }
 
     //region Android Location Manager Events
+
     /**
      * Called by the Android Location Manager when location changes.
      * Gets the location data, transforms the speed to the configured metric
      * applying the configured safety margin, and notifies all subscribers
      * with the new speed info.
+     *
      * @param location The Location data provided by Android.
      */
     @Override
@@ -135,6 +144,9 @@ public class DefaultLocationService implements ILocationService
         {
             iterator.next().OnSpeedChanges(cachedSpeedValue);
         }
+
+        signalChecker.NotifyLocationUpdateReceived();
+        signalLost = false;
     }
 
     @Override
@@ -155,4 +167,19 @@ public class DefaultLocationService implements ILocationService
 
     }
     //endregion
+
+    /**
+     * Called by the location signal checker.
+     * Notifies all subscribers that the signal is lost.
+     */
+    void OnLocationSignalLost()
+    {
+        signalLost = true;
+
+        Iterator<ILocationListener> iterator = subscribers.iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next().OnSignalLost();
+        }
+    }
 }

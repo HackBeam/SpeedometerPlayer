@@ -10,4 +10,9 @@ public interface ILocationListener
      * @param speed The new speed value.
      */
     void OnSpeedChanges(float speed);
+
+    /**
+     * Called when the location signal is lost.
+     */
+    void OnSignalLost();
 }

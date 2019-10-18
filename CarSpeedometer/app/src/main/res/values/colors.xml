@@ -3,7 +3,7 @@
     <color name="colorPrimary">#000</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#33b5e5</color>
-    <color name="popupBackground">#444444</color>
+    <color name="popupBackground">#444</color>
     <color name="normal">#33b5e5</color>
     <color name="limit_danger">#ffcc0000</color>
     <color name="limit_warning">#feaa0c</color>
@@ -12,4 +12,5 @@
     <color name="cruise_very_above">#ffcc0000</color>
     <color name="cruise_below">#5ae533</color>
     <color name="cruise_desired">#5ae533</color>
+    <color name="signal_lost">#ffcc0000</color>
 </resources>

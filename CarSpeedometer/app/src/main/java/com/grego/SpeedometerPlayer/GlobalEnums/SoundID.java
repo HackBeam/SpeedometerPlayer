@@ -7,5 +7,6 @@ public enum SoundID
     LIMIT_DANGER,
     CRUISE_BELOW,
     CRUISE_ABOVE,
-    CRUISE_DANGER
+    CRUISE_DANGER,
+    SIGNAL_LOST
 }
