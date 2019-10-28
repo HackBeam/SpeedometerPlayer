@@ -2,7 +2,7 @@
     <string name="app_name">SpeedometerPlayer</string>
 
     <string name="mirror_mode_preference_name">Modo Espejo</string>
-    <string name="mirror_mode_preference_description">Invierte la pantalla para reflejarla en el cristal</string>
+    <string name="mirror_mode_preference_description">Invierte la pantalla para reflejarla en el cristal del coche</string>
 
     <string name="vibration_preference_name">Vibración</string>
     <string name="vibration_preference_description">Vibrar al usar controles de reproducción</string>
